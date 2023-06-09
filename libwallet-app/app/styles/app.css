@@ -1,0 +1,360 @@
+
+
+@font-face
+{
+    font-family: "Quicksand";
+    src: url("/fonts/Quicksand-VariableFont_wght.ttf");
+    font-display: swap;
+}
+
+body{
+        
+  background: linear-gradient(#0c2066, #4c9b93);
+  margin:0;
+  height: 100vh;
+  width: 100vw;
+  color: white;
+  
+    
+}
+
+#world-svg{
+  position:fixed;
+}
+
+
+.goto-mint-entry{
+  font-size: 3rem;
+  position: fixed;
+  bottom: 30px;
+  right: 60px;
+  background: #2581d7;
+  color: white;
+  height: 50px;
+  line-height: 2.5rem;
+  border-radius: 50px;
+  border: 2px solid #4b93d6;
+  box-shadow: 3px 3px 9px #0c206680;
+  width: 50px;
+  text-align: center;
+  display: inline-block;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+
+.results-showcase{
+    width: 100%;
+    position: relative;
+    margin-top: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-left: 10px;
+    margin-right: 10px;
+
+    opacity: 0;
+    transition: all 0.5s ease-in-out;
+  }
+  
+  .results-showcase.has-results {
+    opacity: 1;
+  }
+
+.results-showcase .clear-results{
+  padding: 2px 8px;
+    border: 2px solid #c8f3fb;
+    border-radius: 6px;
+    background-color: #4ccabf;
+    letter-spacing: 1px;
+    /* word-spacing: 2px; */
+    font-size: 0.7em;
+    font-weight: bold;
+    /* transition: all 0.3s ease-in-out; */
+    color: #c8f3fb;
+    text-shadow: 1px 1px 3px black;
+    position: absolute;
+    top: -12px;
+    left: 10px;
+    cursor: pointer;
+    font-variant: small-caps;
+}
+
+.results{
+  width: 100%;
+  margin-top:5px;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: 53vh;
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */ 
+}
+.results::-webkit-scrollbar { 
+  display: none;  /* Safari and Chrome */
+}
+
+.results .result{
+
+  padding: 5px 15px;
+  text-align: left;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  color: white;
+  display: flex;
+    flex-flow: row;
+    backdrop-filter: blur(5px);
+    box-shadow: 0px 3px 8px 0px rgb(0 0 0 / 20%);
+}
+
+.result .author
+      {
+        border-radius: 5px;
+        display: inline;
+        position: absolute;
+        right: 50px;
+        padding: 0px 5px;
+      }
+    .result .badge 
+      {
+        border-radius: 5px;
+        width: 1.5rem;
+        padding: 2px 5px;
+        display: inline-block;
+        text-align: center;
+      }
+    .result .badge.unlocked
+      {
+        background-color: rgb(27, 114, 0);
+        
+      }
+    .result .badge.locked
+      {
+        background-color: rgb(111, 0, 91);
+        
+      }
+
+    .cache-account {
+        display: flex;
+    }
+    
+    .cache-content {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cache-entries {
+      justify-content: center;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+  }
+
+    .cache-title{
+      font-weight: bolder;
+      letter-spacing: 1pt;
+    }
+
+div.dashbar
+{
+    top: 0px;
+    left:0px;
+    background-color: #3e3e3ec9;
+    width: 100%;
+    height: 80px;
+    position: fixed;
+    z-index: 2147483647;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+
+    -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
+       -moz-animation: fadein 1s; /* Firefox < 16 */
+        -ms-animation: fadein 1s; /* Internet Explorer */
+         -o-animation: fadein 1s; /* Opera < 12.1 */
+            animation: fadein 1s;
+}
+
+div.dashbar a{
+    border-bottom:none;
+}
+
+
+button.connectbtn
+{
+    border-radius: 20px;
+    height: 30px;
+    width: 200px;
+}
+
+
+
+  @keyframes pulse 
+  {       
+    0% {transform: scale(1.0); opacity: 1 ;}
+    100% {transform: scale(1.0); opacity: 0 ;}
+  }
+  
+  circle.pulse
+  {
+    position: fixed;
+    animation-name: pulse;
+	animation-timing-function: linear;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    stroke-opacity: 1;
+    stroke-width: 1;
+    stroke: #49c3b1;
+    /* Giving Animation Function */
+  }
+  
+div.connectinfo
+{
+    align-items: center;
+    justify-content: space-between;
+    right:0;
+    margin:1rem 1rem;     
+    display: flex;
+}
+
+div.connectinfo div.account
+{
+  display: inline-block;
+    cursor: pointer;
+    padding: 5px;
+    margin: 5px 15px 5px 5px;
+    border:2px solid rgba(76,155,147,1);
+    border-radius: 15px;
+    color: rgba(12,32,102,1);
+}
+
+div.connectinfo div.account:hover{
+  text-shadow: 2px 2px rgba(12,32,102,0.2);
+}
+
+div.connectinfo div.account b{
+    color: rgba(12,32,102,1);
+    bottom: 2px;
+    position: relative;
+}
+
+
+div.logo-left
+{
+position: absolute;
+left: 0;
+
+}
+
+
+
+div.center-message
+{
+    position: absolute;
+    top: 80px;
+    z-index: 2000;
+    background: repeating-linear-gradient(
+        45deg,
+        #6b27003f,
+        #0000003a 10px
+      );
+    width: 100%;
+    height: 4rem;
+    text-align: center;
+    font-size: 2.5rem;
+    text-align: center;
+    font-family: 'Quicksand';
+    border: none;
+    
+  -webkit-animation: glow 2s ease-in-out infinite alternate;
+  -moz-animation: glow 2s ease-in-out infinite alternate;
+animation: glow 4s ease-in-out infinite alternate;
+}
+
+
+
+/* Glow Colors */
+#glow-blue {
+    animation-name: glow-blue;
+  }
+  @-webkit-keyframes glow-blue {
+    from {
+      box-shadow: 0 0 2px #82d7f944, 0 0 10px #82d7f956, 0 0 20px #00a7fb46, 0 0 30prgba(0, 167, 251, 0.411)fb;
+    }
+    to {
+      box-shadow: 0 0 10px #82d7f967, 0 0 20px #5ec9fe67, 0 0 30px #5ec9fe70, 0 0 40px #5ec9fe63;
+    }
+  }
+
+
+  
+
+
+.page{
+  /* height: 100vh; */
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  z-index: 1;
+  transition: all 0.5s ease-in-out;
+  top: 60px;
+  position: relative;
+}
+
+
+  /*  fileupload */
+
+  div.modal{
+    color: black;
+  }
+
+
+
+
+div.footer{
+    position: absolute;
+    bottom: 15px;
+    font-size: small;
+}
+
+
+/* */
+
+
+
+div.dashbar
+{
+    left:0px;
+    background: linear-gradient(82deg, rgba(12,32,102,1) 17%, rgba(76,155,147,1) 44%, rgba(195,224,247,1) 95%);
+    box-shadow: 0px 4px 8px 0px rgba(0,0,0, 0.4);
+    backdrop-filter: blur(4px);
+    width: 100%;
+    height: 60px;
+    position: fixed;
+    z-index: 2147483647;
+    top: 0px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+
+    -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
+       -moz-animation: fadein 1s; /* Firefox < 16 */
+        -ms-animation: fadein 1s; /* Internet Explorer */
+         -o-animation: fadein 1s; /* Opera < 12.1 */
+            animation: fadein 1s;
+}
+
+.dashbar .connectinfo svg{
+  position: relative;
+  top:5px;
+}
+div.dashbar a{
+    border-bottom:none;
+}
+

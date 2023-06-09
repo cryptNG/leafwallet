@@ -1,14 +1,23 @@
 import Service from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
+
+function timeout(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+
+
 export default class LibwalletMobileService extends Service {
   //#region setup
+@tracked isReady = false;
 @tracked isRegistered = false;
 
   constructor() {
     super(...arguments);
     this.provider = null;
     this.contract = null;
+    this.connectedWallet=null;
 
     // Open the IndexedDB and create 'wallets' object store if it does not exist
     const dbRequest = indexedDB.open('LibWalletDB', 2);
@@ -26,17 +35,17 @@ export default class LibwalletMobileService extends Service {
   }
 
   // This function sets up _ethers and the contract
-  async setup(contractAddress, jsonRpcUrl, contractAbi) {
+  setup(contractAddress, jsonRpcUrl, contractAbi) {
+    this.contractAddress=contractAddress;
+    this.contractAbi=contractAbi;
     try {
       // Set up provider
       this.provider = new _ethers.providers.JsonRpcProvider(jsonRpcUrl);
 
       // Set up contract
-      this.contract = new _ethers.Contract(
-        contractAddress,
-        contractAbi,
-        this.provider
-      );
+      
+
+      this.isReady=true;
     } catch (err) {
       console.error(`Error during setup: ${err}`);
       throw new Error(`Error during setup: ${err}`);
@@ -46,26 +55,31 @@ export default class LibwalletMobileService extends Service {
   //#endregion
 
   // This function checks if the wallet is registered in the smart contract
-  async checkWalletRegistered() {
+  checkWalletRegistered = async ()=> {
+    
+    let debounce=1;
+
     while(this.isRegistered ===false)
     {
-    try
-    {
+      if(this.connectedWallet!==null)
+      {
+        try
+        {
+          // Call the contract function
+          this.isRegistered = await this.contract.isSenderRegistered({from: this.connectedWallet.address});
+          if(this.isRegistered ===false ) await timeout(2000+debounce);
+          debounce+=debounce;
+        }
+        catch(e)
+        {
+          await timeout(2000+debounce);
+        }
+      }else await timeout(2000);
 
-    // Load the device wallet
-    const wallet = await this.loadWallet();
-
-    // Call the contract function
-   this.isRegistered = await this.contract.isDeviceWalletRegistered({from: wallet.address});
-  
-    }
-    catch(e)
-    {
+      
       
     }
-
-    if(this.isRegistered ===false ) await setTimeout(200);
-}
+  }
 
   // This function generates a new wallet
   async createWallet() {
@@ -84,14 +98,23 @@ export default class LibwalletMobileService extends Service {
     // Check if the wallet exists in IndexedDB
     const dbRequest = indexedDB.open('LibWalletDB', 2);
     return new Promise((resolve, reject) => {
-      dbRequest.onsuccess = function (event) {
+      dbRequest.onsuccess =  (event) =>{
         const db = event.target.result;
         const transaction = db.transaction(['wallets'], 'readonly');
         const objectStore = transaction.objectStore('wallets');
         const getRequest = objectStore.get('deviceWallet');
-        getRequest.onsuccess = function (event) {
+        getRequest.onsuccess = async (event)=> {
           if (event.target.result) {
-            resolve(_ethers.Wallet.fromEncryptedJson(event.target.result,'IMEI'));
+
+            const wallet = await _ethers.Wallet.fromEncryptedJson(event.target.result,'IMEI');
+            this.connectedWallet = new _ethers.Wallet(wallet.privateKey,this.provider);
+
+            this.contract = new _ethers.Contract(
+              this.contractAddress,
+              this.contractAbi,
+              this.connectedWallet
+            );
+            resolve(wallet);
           } else {
             resolve(null);
           }
@@ -161,22 +184,4 @@ export default class LibwalletMobileService extends Service {
     });
   }
 
-  // This function generates a QR code for the public key of a wallet
-  async generateQR(address) {
-    try {
-      // Ensure the wallet has a valid address
-      if (address) {
-        // Create a QR code SVG as a string
-        var qrSvg = qr.imageSync(address, { type: 'svg' });
-        return qrSvg;
-      } else {
-        throw new Error(
-          'Invalid wallet object. Wallet must have a valid address.'
-        );
-      }
-    } catch (err) {
-      console.error(`Error generating QR code: ${err}`);
-      throw new Error(`Error generating QR code: ${err}`);
-    }
-  }
 }

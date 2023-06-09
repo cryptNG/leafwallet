@@ -25,6 +25,7 @@
   "devDependencies": {
     "@babel/plugin-transform-private-methods": "^7.22.5",
     "@ember/optional-features": "^2.0.0",
+    "@ember/render-modifiers": "^2.1.0",
     "@ember/test-helpers": "^2.8.1",
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
@@ -68,6 +69,6 @@
     "edition": "octane"
   },
   "dependencies": {
-    "qr-image": "^3.2.0"
+    "qrcode": "^1.5.3"
   }
 }

@@ -1,8 +1,136 @@
 {{page-title "LibwalletApp"}}
+<style>
+    ol {
+	list-style: none;
+	counter-reset: list;
+	padding: 0 1rem;
+    font-family: Montserrat, sans-serif;
+	margin: 10%;
+}
+li {
+	--stop: calc(100% / var(--length) * var(--i));
+	--l: 62%;
+	--l2: 88%;
+	--h: calc((var(--i) - 1) * (180 / var(--length)));
+	--c1: hsl(var(--h), 71%, var(--l));
+	--c2: hsl(var(--h), 71%, var(--l2));
+	
+	position: relative;
+	counter-increment: list;
+	max-width: 45rem;
+	margin: 2rem auto;
+	padding: 2rem 1rem 1rem;
+	box-shadow: 0.1rem 0.1rem 1.5rem rgba(0, 0, 0, 0.3);
+	border-radius: 0.25rem;
+	overflow: hidden;
+	background-color: white;
+}
+
+li::before {
+	content: '';
+	display: block;
+	width: 100%;
+	height: 1rem;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background: linear-gradient(to right, var(--c1) var(--stop), var(--c2) var(--stop));
+    animation: pulse 2s infinite;
+}
+
+h3 {
+	display: flex;
+	align-items: baseline;
+	margin: 0 0 1rem;
+	color: rgb(70 70 70);
+    line-height: 3rem;;
+}
+
+h3 span{
+    padding:0 5px;
+    display: flex;
+	justify-content: center;
+	align-items: center;
+	flex: 0 0 auto;
+	margin-right: 1rem;
+	width: 2rem;
+	height: 2rem;
+	padding: 1rem;
+	border-radius: 50%;
+	background-color: var(--c1);
+	color: white;
+}
+
+p {
+	margin: 0;
+	line-height: 1.6;
+    color: black;
+}
+
+@media (min-width: 40em) {
+	li {
+		margin: 3rem auto;
+		padding: 3rem 2rem 2rem;
+	}
+	
+	h3 {
+	    font-size: 1.5rem;
+		margin: 0 0 2rem;
+	}
+	
+	h3::before {
+		margin-right: 1.5rem;
+	}
+
+    @keyframes pulse {
+	0% {
+		transform: scale(0.95);
+		box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7);
+	}
+
+	70% {
+		transform: scale(1);
+		box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+	}
+
+	100% {
+		transform: scale(0.95);
+		box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+	}
+}
+}
+</style>
+<ol style="--length: 5" role="list">
+	<li style="--i: {{this.stage}}">
+		<h3><span>{{this.stage}}</span>
+        {{#if this.stage1}}Initializing Environment{{/if}}
+        {{#if this.stage2}}Checking existing Device Wallet{{/if}}
+        {{#if this.stage3}}Creating Device Wallet{{/if}}
+        {{#if this.stage4}}Loading Device Wallet{{/if}}
+        {{#if this.stage5}}Verifying Device Wallet{{/if}}
+        </h3>
+        <p>
+            {{#if this.stage2}}
+                Preparing your device environment to interact with the blockchain
+            {{/if}}
+            {{#if this.stage2}}
+                Checking for device wallet in the secret storage of your device
+            {{/if}}
+            {{#if this.stage3}}
+                Creating new device wallet into secret storage of your device
+            {{/if}}
+            {{#if this.stage4}}
+                Loading the device wallet from the secret storage of your device
+            {{/if}}
+            {{#if this.stage5}}
+                Please use MetaTrail Register Device App @... to register your device within the blockchain
+                <DeviceQrCode @publicKey={{this.wallet.address}}/>
+            {{/if}}
+        </p>
+	</li>
+</ol>
 {{#if this.isInitialized}}
-{{#if this.isNotYetRegistered}}
-{{this.qrCodeAsSvg}}
-{{/if}}
+
 {{/if}}
 
 {{outlet}}
