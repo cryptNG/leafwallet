@@ -23,6 +23,7 @@
     "test:ember": "ember test"
   },
   "devDependencies": {
+    "@babel/plugin-transform-private-methods": "^7.22.5",
     "@ember/optional-features": "^2.0.0",
     "@ember/test-helpers": "^2.8.1",
     "@glimmer/component": "^1.1.2",
@@ -67,7 +68,6 @@
     "edition": "octane"
   },
   "dependencies": {
-    "ethers": "^6.5.1",
     "qr-image": "^3.2.0"
   }
 }

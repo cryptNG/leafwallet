@@ -3,7 +3,7 @@ import { tracked } from '@glimmer/tracking';
 
 export default class LibwalletMobileService extends Service {
   //#region setup
-@tracked isReady = false;
+@tracked isRegistered = false;
 
   constructor() {
     super(...arguments);
@@ -11,27 +11,28 @@ export default class LibwalletMobileService extends Service {
     this.contract = null;
 
     // Open the IndexedDB and create 'wallets' object store if it does not exist
-    const dbRequest = indexedDB.open('LibWalletDB', 1);
+    const dbRequest = indexedDB.open('LibWalletDB', 2);
     dbRequest.onupgradeneeded = (event) => {
       const db = event.target.result;
       if (!db.objectStoreNames.contains('wallets')) {
         db.createObjectStore('wallets');
       }
-      this.isReady = true;
     };
     dbRequest.onerror = function (event) {
       console.error('Failed to open or upgrade database during initialization.');
     };
+
+    this.checkWalletRegistered();
   }
 
-  // This function sets up ethers and the contract
+  // This function sets up _ethers and the contract
   async setup(contractAddress, jsonRpcUrl, contractAbi) {
     try {
       // Set up provider
-      this.provider = new ethers.providers.JsonRpcProvider(jsonRpcUrl);
+      this.provider = new _ethers.providers.JsonRpcProvider(jsonRpcUrl);
 
       // Set up contract
-      this.contract = new ethers.Contract(
+      this.contract = new _ethers.Contract(
         contractAddress,
         contractAbi,
         this.provider
@@ -46,19 +47,34 @@ export default class LibwalletMobileService extends Service {
 
   // This function checks if the wallet is registered in the smart contract
   async checkWalletRegistered() {
+    while(this.isRegistered ===false)
+    {
+    try
+    {
+
     // Load the device wallet
     const wallet = await this.loadWallet();
 
     // Call the contract function
-    return await this.contract.isDeviceWalletRegistered(wallet.address);
-  }
+   this.isRegistered = await this.contract.isDeviceWalletRegistered({from: wallet.address});
+  
+    }
+    catch(e)
+    {
+      
+    }
+
+    if(this.isRegistered ===false ) await setTimeout(200);
+}
 
   // This function generates a new wallet
   async createWallet() {
     // Generate new wallet
-    const wallet = ethers.Wallet.createRandom();
+    const wallet = _ethers.Wallet.createRandom();
+
+
     // Convert wallet to JSON and store
-    const walletJson = JSON.stringify(wallet);
+    const walletJson = await wallet.encrypt('IMEI');
     await this.saveWallet(walletJson);
     return wallet;
   }
@@ -66,7 +82,7 @@ export default class LibwalletMobileService extends Service {
   // This function loads a wallet from secure storage
   async loadWallet() {
     // Check if the wallet exists in IndexedDB
-    const dbRequest = indexedDB.open('LibWalletDB', 1);
+    const dbRequest = indexedDB.open('LibWalletDB', 2);
     return new Promise((resolve, reject) => {
       dbRequest.onsuccess = function (event) {
         const db = event.target.result;
@@ -75,7 +91,7 @@ export default class LibwalletMobileService extends Service {
         const getRequest = objectStore.get('deviceWallet');
         getRequest.onsuccess = function (event) {
           if (event.target.result) {
-            resolve(ethers.Wallet.fromJSON(event.target.result));
+            resolve(_ethers.Wallet.fromEncryptedJson(event.target.result,'IMEI'));
           } else {
             resolve(null);
           }
@@ -93,7 +109,7 @@ export default class LibwalletMobileService extends Service {
   // This function saves a wallet to secure storage
   async saveWallet(walletJson) {
     // Save the wallet in IndexedDB
-    const dbRequest = indexedDB.open('LibWalletDB', 1);
+    const dbRequest = indexedDB.open('LibWalletDB', 2);
     return new Promise((resolve, reject) => {
       dbRequest.onupgradeneeded = function (event) {
         const db = event.target.result;
@@ -121,7 +137,7 @@ export default class LibwalletMobileService extends Service {
 
   // This function checks if a wallet exists
   async checkWalletExists() {
-    const dbRequest = indexedDB.open('LibWalletDB', 1);
+    const dbRequest = indexedDB.open('LibWalletDB', 2);
     return new Promise((resolve, reject) => {
       dbRequest.onsuccess = function (event) {
         const db = event.target.result;

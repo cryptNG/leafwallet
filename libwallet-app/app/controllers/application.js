@@ -1,14 +1,15 @@
 import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 
 export default class ApplicationController extends Controller {
     @service libwalletMobile;
     
-    wallet;
+    @tracked wallet=null;
     constructor()
     {
         super(...arguments);
-
+        this.initialize();
         
     }
 
@@ -23,16 +24,22 @@ export default class ApplicationController extends Controller {
         {
             await setTimeout(100);
         }
-        if(!this.libwalletMobile.checkWalletExists())
+        if(! await this.libwalletMobile.checkWalletExists())
         {
-            this.libwalletMobile.createWallet();
+            await this.libwalletMobile.createWallet();
         }
-        this.wallet = this.libwalletMobile.loadWallet();
+        this.wallet = await this.libwalletMobile.loadWallet();
     }
 
     get isNotYetRegistered()
     {
-        return !this.libwalletMobile.checkWalletRegistered() 
+        return ( async () =>{
+            try{
+                return ! await this.libwalletMobile.checkWalletRegistered() ;
+            }catch(e){
+                return true;
+            }
+        })();
     }
 
     get qrCodeAsSvg()

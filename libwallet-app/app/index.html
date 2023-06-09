@@ -17,6 +17,10 @@
     {{content-for "body"}}
 
     <script src="{{rootURL}}assets/vendor.js"></script>
+    <script type="module">
+      import { ethers } from "{{rootURL}}assets/ethers.js";
+      // Your code here...
+  </script>
     <script src="{{rootURL}}assets/libwallet-app.js"></script>
 
     {{content-for "body-footer"}}
