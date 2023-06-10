@@ -7,8 +7,8 @@ export default class DirectNetworkService extends Service {
 @service router;
     _provider;
     _jsonRpcUrl = 'https://testnet.cryptng.xyz:8545';
-    _libwallet_contract_address='0x30eA7f07ec634f798Be062FB2AC5B1C9f25392E2';
-    _contractAbi=[
+    _libwallet_contract_address='0x4Bc5741Ee7B8F7Ed527e059679fD65D3EC168B35';
+    _contractAbi= [
       {
         "inputs": [],
         "name": "isSenderRegistered",
@@ -35,6 +35,20 @@ export default class DirectNetworkService extends Service {
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "getRelatedDevices",
+        "outputs": [
+          {
+            "internalType": "address[]",
+            "name": "",
+            "type": "address[]"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function",
+        "constant": true
       },
       {
         "inputs": [

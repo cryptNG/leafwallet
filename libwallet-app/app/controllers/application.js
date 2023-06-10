@@ -105,8 +105,8 @@ export default class ApplicationController extends Controller {
 
 
 const jsonRpcUrl = 'https://testnet.cryptng.xyz:8545';
-const contractAddress='0x30eA7f07ec634f798Be062FB2AC5B1C9f25392E2';
-const contractAbi=[
+const contractAddress='0x4Bc5741Ee7B8F7Ed527e059679fD65D3EC168B35';
+const contractAbi= [
   {
     "inputs": [],
     "name": "isSenderRegistered",
@@ -133,6 +133,20 @@ const contractAbi=[
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getRelatedDevices",
+    "outputs": [
+      {
+        "internalType": "address[]",
+        "name": "",
+        "type": "address[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
   },
   {
     "inputs": [
