@@ -1,6 +1,6 @@
 import Service from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-
+import { rethrow } from 'rsvp';
 
 function timeout(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -197,7 +197,7 @@ export default class LibwalletMobileService extends Service {
     } catch(exc) {
       rethrow(exc);
     } finally {
-      this._libwalletContract.removeAllListeners();
+      this.contract.removeAllListeners();
     }
   
     return success;
