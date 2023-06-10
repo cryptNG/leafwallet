@@ -1,0 +1,13 @@
+<style>
+    div.video-controls{
+        color: black;
+    }
+
+    video.video {
+        transform: scaleX(-1);
+    }
+</style>
+
+<div class="camera" {{did-insert this.prepare}}>
+    <video class="video" srcObject={{this.camera.videoStream}} autoplay></video>
+</div>

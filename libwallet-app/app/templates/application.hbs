@@ -1,13 +1,13 @@
 {{page-title "LibwalletApp"}}
 <style>
-    ol {
+    ol.progress {
 	list-style: none;
 	counter-reset: list;
 	padding: 0 1rem;
     font-family: Montserrat, sans-serif;
 	margin: 10%;
 }
-li {
+ol.progress li {
 	--stop: calc(100% / var(--length) * var(--i));
 	--l: 62%;
 	--l2: 88%;
@@ -26,7 +26,7 @@ li {
 	background-color: white;
 }
 
-li::before {
+ol.progress li::before {
 	content: '';
 	display: block;
 	width: 100%;
@@ -100,7 +100,9 @@ p {
 }
 }
 </style>
-<ol style="--length: 5" role="list">
+<div class="page">
+{{#if this.isNotYetRegistered}}
+<ol class="progress" style="--length: 5" role="list">
 	<li style="--i: {{this.stage}}">
 		<h3><span>{{this.stage}}</span>
         {{#if this.stage1}}Initializing Environment{{/if}}
@@ -123,14 +125,26 @@ p {
                 Loading the device wallet from the secret storage of your device
             {{/if}}
             {{#if this.stage5}}
-                Please use MetaTrail Register Device App @... to register your device within the blockchain
-                <DeviceQrCode @publicKey={{this.wallet.address}}/>
+				
+					Please use the <b>Register Device App</b> to assign your device within the blockchain
+					<DeviceQrCode @publicKey={{this.wallet.address}}/>
             {{/if}}
         </p>
 	</li>
 </ol>
-{{#if this.isInitialized}}
+{{else}}
+	<Card>
+		<h3>Welcome to LibWallet</h3>
+        <p>
+            You can store some new message to the blockchain
+			<Input @value={{this.newMessage}}/>
+			<button {{on 'click' (fn this.submitNewMessage)}}
+        </p>
+		<p>
+            Blockchain persisted message
+        </p>
+	</Card>
 
 {{/if}}
-
+</div>
 {{outlet}}

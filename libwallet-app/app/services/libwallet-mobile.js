@@ -74,7 +74,7 @@ export default class LibwalletMobileService extends Service {
         {
           await timeout(2000+debounce);
         }
-      }else await timeout(2000);
+      }else await timeout(100);
 
       
       
@@ -184,4 +184,23 @@ export default class LibwalletMobileService extends Service {
     });
   }
 
+  
+  async assignData(message) {
+    let success = false;
+    
+    try {
+
+      let tx = await this.contract.assignData(message);
+      console.log('tx:'+ await tx.wait());
+  
+      success = true;
+    } catch(exc) {
+      rethrow(exc);
+    } finally {
+      this._libwalletContract.removeAllListeners();
+    }
+  
+    return success;
+  }
+  
 }

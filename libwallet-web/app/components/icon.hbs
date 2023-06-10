@@ -1,0 +1,100 @@
+<div {{did-insert this.generateIcon}}>
+<svg id="icons" width={{this.height}} height={{this.height}} viewBox="-55 -55 120 120"  xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+   <defs>
+    <filter id="drop-shadow-normal" x="-100%" y="-100%" width="400%" height="400%">
+      <feOffset result="offOut" in="SourceAlpha" dx="4" dy="4" />
+      <feColorMatrix result="matrixOut" in="offOut" type="matrix"
+      values="0.2 0 0 0 0 
+              0 0.2 0 0 0 
+              0 0 0.2 0 0 
+              0 0 0 0.7 0" />
+      <feGaussianBlur result="blurOut" in="matrixOut" stdDeviation="5" />
+      <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+    </filter>
+    <filter id="drop-shadow-bold" x="-100%" y="-100%" width="400%" height="400%">
+      <feOffset result="offOut" in="SourceAlpha" dx="5" dy="5" />
+      <feColorMatrix result="matrixOut" in="offOut" type="matrix"
+      values="0.2 0 0 0 0 
+              0 0.2 0 0 0 
+              0 0 0.2 0 0 
+              0 0 0 0.7 0" />
+      <feGaussianBlur result="blurOut" in="matrixOut" stdDeviation="7" />
+      <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+    </filter>
+    <filter id="drop-shadow-short" x="-100%" y="-100%" width="400%" height="400%">
+      <feOffset result="offOut" in="SourceAlpha" dx="3" dy="3" />
+      <feColorMatrix result="matrixOut" in="offOut" type="matrix"
+      values="0.2 0 0 0 0 
+              0 0.2 0 0 0 
+              0 0 0.2 0 0 
+              0 0 0 0.7 0" />
+      <feGaussianBlur result="blurOut" in="matrixOut" stdDeviation="3" />
+      <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+    </filter>
+    <filter id="drop-shadow-hard" x="-100%" y="-100%" width="400%" height="400%">
+      <feOffset result="offOut" in="SourceAlpha" dx="5" dy="5" />
+      <feColorMatrix result="matrixOut" in="offOut" type="matrix"
+      values="0.2 0 0 0 0 
+              0 0.2 0 0 0 
+              0 0 0.2 0 0 
+              0 0 0 0.7 0" />
+      <feGaussianBlur result="blurOut" in="matrixOut" stdDeviation="7" />
+      <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+    </filter>
+    <filter id="line-shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="4" dy="4" stdDeviation="4"/>
+    </filter>
+    <filter id="drop-shadow-small" x="-100%" y="-100%" width="400%" height="400%">
+      <feOffset result="offOut" in="SourceAlpha" dx="3" dy="3" />
+      <feColorMatrix result="matrixOut" in="offOut" type="matrix"
+      values="0.2 0 0 0 0 
+              0 0.2 0 0 0 
+              0 0 0.2 0 0 
+              0 0 0 1 0" />
+      <feGaussianBlur result="blurOut" in="matrixOut" stdDeviation="3" />
+      <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+    </filter>
+    <filter id="inset-shadow-small" x="-50%" y="-50%" width="200%" height="200%">
+    <feComponentTransfer in=SourceAlpha>
+      <feFuncA type="table" tableValues="1 0" />
+    </feComponentTransfer>
+    <feGaussianBlur stdDeviation="3"/>
+    <feOffset dx="3" dy="3" result="offsetblur"/>
+    <feFlood flood-color="rgb(0, 0, 0)" result="color"/>
+    <feComposite in2="offsetblur" operator="in"/>
+    <feComposite in2="SourceAlpha" operator="in" />
+    <feMerge>
+      <feMergeNode in="SourceGraphic" />
+      <feMergeNode />
+    </feMerge>
+  </filter>
+  <filter id="inset-shadow-normal" x="-50%" y="-50%" width="200%" height="200%">
+    <feComponentTransfer in=SourceAlpha>
+      <feFuncA type="table" tableValues="1 0" />
+    </feComponentTransfer>
+    <feGaussianBlur stdDeviation="8"/>
+    <feOffset dx="4" dy="4" result="offsetblur"/>
+    <feFlood flood-color="rgb(0, 0, 0)" result="color"/>
+    <feComposite in2="offsetblur" operator="in"/>
+    <feComposite in2="SourceAlpha" operator="in" />
+    <feMerge>
+      <feMergeNode in="SourceGraphic" />
+      <feMergeNode />
+    </feMerge>
+  </filter>
+    
+  </defs>
+ 
+   <g
+     id="layer1">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.1008px;font-family:Quicksand;fill:#ffffff;fill-opacity:1;stroke-width:0.0526088"
+       x="135.128502"
+       y="164.39116"
+       text-anchor="end"
+       id="text2679-4">dhsgfhksdg</text>
+    </g>
+</svg>
+</div>

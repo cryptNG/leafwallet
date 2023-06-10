@@ -1,0 +1,36 @@
+
+<style>
+
+    div.video-controls{
+    color: black;
+}
+</style>
+
+<DashBar></DashBar>
+
+<div class="page">
+  
+    {{#if this.wallet.isConnected}}
+    <button {{action "toggleCameraViewModal"}}>Assign new Device</button>
+    
+    {{else}}
+      To participate, press "CONNECT" to connect to your Crypto-Wallet
+    {{/if}}
+
+  
+{{#if this.isShowingCameraViewModal}}
+ <ModalDialog @onClose={{action "toggleCameraViewModal"}} @targetAttachment="center" @translucentOverlay={{true}}>
+  <CameraView @validKeyReceived={{this.handleValidKey}}></CameraView>
+  <p>Scan the QR Code presented in the MetaTrail app on your device</p>
+  </ModalDialog>
+{{/if}}
+
+</div>
+<div class="footer">
+  CopyRight:
+  <a href="https://cryptng.xyz">
+    CryptNG
+  </a>
+  - this service is in development!
+</div>
+

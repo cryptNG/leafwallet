@@ -1,0 +1,58 @@
+<style>
+  .shadow {
+    -webkit-filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .7));
+    filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .7));
+    position: relative;
+    top: 5px;
+    cursor: pointer;
+  }
+
+  .cross{
+    stroke:#be0000;
+  }
+  .shadow:hover .cross{
+    stroke:#e41e1e;
+  }
+</style>
+<div class="dashbar">
+<CryptologoBanner @project="metaTrail"></CryptologoBanner>
+  
+  <div class="connectinfo">
+    {{#if this.wallet.isConnected}}
+    
+    <div class="fame-balance">
+      {{this.wallet.fameBalance}}
+    </div>
+      <div  title="Disconnect from Wallet" {{on 'click' this.disconnect}}>
+        <Icon @address={{this.wallet.connectedAccount}} @height=60/>
+      </div>
+    {{else}}
+       <div class="account" id="glow-red" {{on 'click' this.connect}}><b>&lt;</b> CONNECT <b>&gt;</b></div>
+    {{/if}}
+    
+  </div>
+</div> 
+
+
+{{#if this.isShowingAddNetworkModal}}
+  <ModalDialog @targetAttachment="center" @translucentOverlay={{true}}>
+    <div class="modal">
+      <div class="description">
+       An error occured! <br>
+       {{this.sessionCreateFailMessage}} <br>
+       You might want to check if your network settings are correct.
+        (click on any element below to copy it to your clipboard!)
+  </div>
+  <div class="modalbody">
+  <div class="copyable-entry" {{on 'click' this.toClipBoardNetworkName}}>Network Name: CryptNG-TestNet </div>
+  <div class="copyable-entry" {{on 'click' this.toClipBoardRPCURL}}>RPC-URL: https://testnet.cryptng.xyz:8545 </div>
+  <div class="copyable-entry" {{on 'click' this.toClipBoardChainId}}>Chain-ID 1337 </div>
+  <div class="copyable-entry" {{on 'click' this.toClipBoardSymbol}}>SYMBOL CPAY</div>
+  <div class="copyable-entry" {{on 'click' this.toClipBoardBlockExplorer}}>Block-Explorer: https://yitc.ddns.net:4000/</div>
+  </div>
+  </div>
+   <button class="mobile" type="button" {{on 'click' this.closeAddNetworkModal}}>
+        CLOSE
+      </button>
+  </ModalDialog>
+{{/if}}

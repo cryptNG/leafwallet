@@ -1,6 +1,7 @@
 import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+import { action } from '@ember/object';
 
 function timeout(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -9,6 +10,7 @@ function timeout(ms) {
 export default class ApplicationController extends Controller {
     @service libwalletMobile;
     @tracked stage = 1;
+    @tracked newMessage = '';
     
     @tracked wallet=null;
     lastStepTime = Date.now();
@@ -79,7 +81,8 @@ export default class ApplicationController extends Controller {
         this.wallet = await this.libwalletMobile.loadWallet();
         if((Date.now()-before) < 2000) await timeout(2000 - (Date.now()-before));
         before = Date.now();
-        this.stage=5;
+        await timeout(400);
+        this.stage= this.libwalletMobile.isRegistered?6:5;
 
     }
 
@@ -93,7 +96,11 @@ export default class ApplicationController extends Controller {
         return this.libwalletMobile.generateQR(this.wallet.address);
     }
 
-
+    @action async submitNewMessage(){
+      if(this.newMessage!==''){
+        await this.libwalletMobile.assignData(this.newMessage);
+      }
+    }
 }
 
 

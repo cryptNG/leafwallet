@@ -1,0 +1,319 @@
+
+@import "ember-modal-dialog/ember-modal-structure.css";
+@import "ember-modal-dialog/ember-modal-appearance.css";
+@font-face
+{
+    font-family: "Quicksand";
+    src: url("/fonts/Quicksand-VariableFont_wght.ttf");
+    font-display: swap;
+}
+
+body{
+        
+  background: linear-gradient(#0c2066, #4c9b93);
+  margin:0;
+  height: 100vh;
+  width: 100vw;
+  color: white;
+  
+    
+}
+
+#world-svg{
+  position:fixed;
+}
+
+@keyframes fade {
+	0% {opacity: 1; transform: scale(0);}
+	50% {opacity: 1; transform: scale(1);}
+    100% {opacity: 0;}
+}
+
+
+.with-shadow {
+	box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.35), 0 1px 1px 0 rgba(0, 0, 0, 0.59);
+	background-color: rgba(255, 255, 255, 0.3);
+}
+
+
+.raise-button:hover {
+	box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.3), 0 15px 15px 0 rgba(0, 0, 0, 0.4);
+	background-color: #FFF !important;
+	color: #222 !important;
+}
+
+.raise-button:active {
+	-webkit-transition: 0.05s ease-out;
+	transition: 0.05s ease-out;
+	box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.44), 0 1px 1px 0 rgba(0, 0, 0, 0.68);
+}
+
+
+
+button.connectbtn
+{
+    border-radius: 20px;
+    height: 30px;
+    width: 200px;
+}
+
+
+button.ripple {
+	background-position: center;
+	transition: background 0.8s;
+  }
+  button.ripple:hover {
+	background: rgba(255, 0, 0, 0.301) radial-gradient(circle, transparent 1%, rgba(255, 0, 0, 0.301) 1%) center/15000%;
+
+	box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+	backdrop-filter: blur(5px);
+
+}
+  button.ripple:active {
+	background-color: rgba(255, 0, 0, 0.493);
+	background-size: 100%;
+	transition: background 0s;
+  
+  }
+
+  @keyframes pulse 
+  {       
+    0% {transform: scale(1.0); opacity: 1 ;}
+    100% {transform: scale(1.0); opacity: 0 ;}
+  }
+  
+  circle.pulse
+  {
+    position: fixed;
+    animation-name: pulse;
+	animation-timing-function: linear;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    stroke-opacity: 1;
+    stroke-width: 1;
+    stroke: #49c3b1;
+    /* Giving Animation Function */
+  }
+  
+div.connectinfo
+{
+    align-items: center;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    right:0;
+    margin-right: 2rem;
+    position: absolute;
+}
+
+div.connectinfo div.account
+{
+   
+    margin: 5px 15px 5px 5px;
+    cursor: pointer;
+    padding: 5px;
+    line-height: 1rem;
+}
+
+div.connectinfo div.account:hover{
+  background-color: #4ccabf;
+  border-radius: 10px;
+}
+
+div.connectinfo div.account b{
+    color: red;
+}
+
+
+div.logo-left
+{
+position: absolute;
+left: 0;
+
+}
+
+
+
+div.center-message
+{
+    position: absolute;
+    top: 80px;
+    z-index: 2000;
+    background: repeating-linear-gradient(
+        45deg,
+        #6b27003f,
+        #0000003a 10px
+      );
+    width: 100%;
+    height: 4rem;
+    text-align: center;
+    font-size: 2.5rem;
+    text-align: center;
+    font-family: 'Quicksand';
+    border: none;
+    
+  -webkit-animation: glow 2s ease-in-out infinite alternate;
+  -moz-animation: glow 2s ease-in-out infinite alternate;
+animation: glow 4s ease-in-out infinite alternate;
+}
+
+
+
+/* Glow Colors */
+#glow-blue {
+    animation-name: glow-blue;
+  }
+  @-webkit-keyframes glow-blue {
+    from {
+      box-shadow: 0 0 2px #82d7f944, 0 0 10px #82d7f956, 0 0 20px #00a7fb46, 0 0 30prgba(0, 167, 251, 0.411)fb;
+    }
+    to {
+      box-shadow: 0 0 10px #82d7f967, 0 0 20px #5ec9fe67, 0 0 30px #5ec9fe70, 0 0 40px #5ec9fe63;
+    }
+  }
+
+
+  
+
+
+.page{
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  z-index: 1;
+  align-items: center;
+  transition: all 0.5s ease-in-out;
+  top: 50%;
+  left:0px;
+}
+
+
+  /*  fileupload */
+
+  div.modal{
+    color: black;
+  }
+
+
+div.content
+{   
+     font-size: larger;
+    display: flex;
+    top: 100px;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    position: fixed;
+    width: 100%;
+    height: calc(100% - 80px);
+}
+
+div.top{
+    background-color: aliceblue;
+    width: 100%;
+    left: 0px;
+    position: fixed;
+}
+
+
+
+div.bottom
+{
+    position: absolute;
+    bottom: 7rem;
+}
+
+button.mobile
+{    
+    width: 10rem;
+    font-size: 1.1rem;
+    height: 4rem;
+    border-radius: 10px;
+}
+
+
+
+div.footer{
+    position: absolute;
+    bottom: 15px;
+    font-size: small;
+}
+
+
+/* */
+
+
+
+div.dashbar
+{
+    left:0px;
+    background-color: #3e3e3e73;
+    backdrop-filter: blur(4px);
+    width: 100%;
+    height: 60px;
+    position: fixed;
+    z-index: 2147483647;
+    top: 0px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+
+    -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
+       -moz-animation: fadein 1s; /* Firefox < 16 */
+        -ms-animation: fadein 1s; /* Internet Explorer */
+         -o-animation: fadein 1s; /* Opera < 12.1 */
+            animation: fadein 1s;
+}
+
+div.dashbar a{
+    border-bottom:none;
+}
+
+
+button.connectbtn
+{
+    border-radius: 20px;
+    width: 200px;
+}
+div.connectinfo
+{
+    display: flex;
+    justify-content: space-between;
+    right:0;
+    margin-right: 2rem;
+    position: absolute;
+}
+
+div.connectinfo div.account
+{
+    line-height: 45px;
+    margin: 5px 15px 5px 5px;
+
+    b{
+        color: red;
+    }
+}
+
+
+
+
+
+.with-shadow {
+	box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.35), 0 1px 1px 0 rgba(0, 0, 0, 0.59);
+	background-color: rgba(255, 255, 255, 0.3);
+}
+
+
+
+.middle {
+position: relative;
+left: -8px;
+font-size: 1.3em;
+margin: 20px;
+text-shadow: 1px 1px 2px #000000a0;
+}
+
