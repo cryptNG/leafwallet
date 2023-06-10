@@ -12,6 +12,7 @@ export default class LibwalletMobileService extends Service {
   //#region setup
 @tracked isReady = false;
 @tracked isRegistered = false;
+@tracked oldMessage = '';
 
   constructor() {
     super(...arguments);
@@ -32,6 +33,7 @@ export default class LibwalletMobileService extends Service {
     };
 
     this.checkWalletRegistered();
+    this.checkData();
   }
 
   // This function sets up _ethers and the contract
@@ -81,6 +83,36 @@ export default class LibwalletMobileService extends Service {
     }
   }
 
+  checkData = async ()=> {
+    
+    let debounce=1;
+
+    while(true ===true)
+    {
+      if(this.connectedWallet!==null)
+      {
+        try
+        {
+          // Call the contract function
+          const oldMessage = await this.contract.getData({from: this.connectedWallet.address});
+          if(this.oldMessage !== oldMessage){
+            debounce=1;
+          }
+          this.oldMessage =oldMessage;
+          await timeout(2000+debounce);
+          debounce+=debounce;
+        }
+        catch(e)
+        {
+          await timeout(2000+debounce);
+        }
+      }else await timeout(100);
+
+      
+      
+    }
+  }
+
   // This function generates a new wallet
   async createWallet() {
     // Generate new wallet
@@ -114,6 +146,7 @@ export default class LibwalletMobileService extends Service {
               this.contractAbi,
               this.connectedWallet
             );
+            this.getBalance();
             resolve(wallet);
           } else {
             resolve(null);
@@ -184,13 +217,19 @@ export default class LibwalletMobileService extends Service {
     });
   }
 
+
+  @tracked deviceWalletBalance = 0;
+  async getBalance()
+  {
+    return this.deviceWalletBalance = await this.provider.getBalance(this.connectedWallet.address) / 1000000000000000000;
+  }
   
   async assignData(message) {
     let success = false;
     
     try {
 
-      let tx = await this.contract.assignData(message);
+      let tx = await this.contract.assignData(message,{from: this.connectedWallet.address});
       console.log('tx:'+ await tx.wait());
   
       success = true;
@@ -199,7 +238,7 @@ export default class LibwalletMobileService extends Service {
     } finally {
       this.contract.removeAllListeners();
     }
-  
+    this.getBalance();
     return success;
   }
   

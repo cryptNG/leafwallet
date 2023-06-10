@@ -15,7 +15,7 @@
   }
 </style>
 <div class="dashbar">
-<CryptologoBanner @project="metaTrail"></CryptologoBanner>
+<CryptologoBanner @project="libWallet"></CryptologoBanner>
   
   <div class="connectinfo">
     {{#if this.wallet.isConnected}}
@@ -23,7 +23,7 @@
     <div class="fame-balance">
       {{this.wallet.fameBalance}}
     </div>
-      <div  title="Disconnect from Wallet" {{on 'click' this.disconnect}}>
+      <div>
         <Icon @address={{this.wallet.connectedAccount}} @height=60/>
       </div>
     {{else}}
@@ -42,15 +42,15 @@
        {{this.sessionCreateFailMessage}} <br>
        You might want to check if your network settings are correct.
         (click on any element below to copy it to your clipboard!)
-  </div>
-  <div class="modalbody">
-  <div class="copyable-entry" {{on 'click' this.toClipBoardNetworkName}}>Network Name: CryptNG-TestNet </div>
-  <div class="copyable-entry" {{on 'click' this.toClipBoardRPCURL}}>RPC-URL: https://testnet.cryptng.xyz:8545 </div>
-  <div class="copyable-entry" {{on 'click' this.toClipBoardChainId}}>Chain-ID 1337 </div>
-  <div class="copyable-entry" {{on 'click' this.toClipBoardSymbol}}>SYMBOL CPAY</div>
-  <div class="copyable-entry" {{on 'click' this.toClipBoardBlockExplorer}}>Block-Explorer: https://yitc.ddns.net:4000/</div>
-  </div>
-  </div>
+      </div>
+      <div class="modalbody">
+        <div class="copyable-entry" {{on 'click' this.toClipBoardNetworkName}}>Network Name: CryptNG-TestNet </div>
+        <div class="copyable-entry" {{on 'click' this.toClipBoardRPCURL}}>RPC-URL: https://testnet.cryptng.xyz:8545 </div>
+        <div class="copyable-entry" {{on 'click' this.toClipBoardChainId}}>Chain-ID 1337 </div>
+        <div class="copyable-entry" {{on 'click' this.toClipBoardSymbol}}>SYMBOL CPAY</div>
+        <div class="copyable-entry" {{on 'click' this.toClipBoardBlockExplorer}}>Block-Explorer: https://yitc.ddns.net:4000/</div>
+      </div>
+    </div>
    <button class="mobile" type="button" {{on 'click' this.closeAddNetworkModal}}>
         CLOSE
       </button>

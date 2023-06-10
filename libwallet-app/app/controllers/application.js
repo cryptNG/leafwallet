@@ -52,6 +52,9 @@ export default class ApplicationController extends Controller {
         return this.libwalletMobile.isRegistered;
     }
 
+    get oldMessage(){
+      return this.libwalletMobile.oldMessage;
+    }
 
     get isInitialized()
     {
@@ -79,9 +82,7 @@ export default class ApplicationController extends Controller {
         before = Date.now();
         this.stage=4;
         this.wallet = await this.libwalletMobile.loadWallet();
-        if((Date.now()-before) < 2000) await timeout(2000 - (Date.now()-before));
         before = Date.now();
-        await timeout(400);
         this.stage= this.libwalletMobile.isRegistered?6:5;
 
     }
@@ -101,6 +102,7 @@ export default class ApplicationController extends Controller {
         await this.libwalletMobile.assignData(this.newMessage);
       }
     }
+
 }
 
 

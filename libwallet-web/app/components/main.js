@@ -12,29 +12,57 @@ export default class MainComponent extends Component {
 
   @service libwalletWebService;
   @tracked isShowingCameraViewModal = false;
+
+  @tracked wallets;
+
   constructor(){
     super(...arguments);
+    this.getAllDevices();
   }
 
   get wallet(){
     return window.wallet;
   }
 
- @action handleValidKey(pubKey)
+ @action async handleValidKey(pubKey)
  {
 this.toggleCameraViewModal();
-this.assignNewDevice(pubKey);
+await this.assignNewDevice(pubKey);
+await this.getAllDevices();
  }
 
-   assignNewDevice(pubKey)
+   async assignNewDevice(pubKey)
   {
-    this.libwalletWebService.registerWallet(pubKey);
+   await this.libwalletWebService.registerWallet(pubKey);
   }
+
+  async getAllDevices()
+  {
+    this.wallets = await this.libwalletWebService.getAllDevicesOfSender();
+  }
+
 
 
   @action toggleCameraViewModal() {
     this.isShowingCameraViewModal = !this.isShowingCameraViewModal;
     console.log('showing camera view: ' + this.isShowingCameraViewModal);
+  }
+
+
+
+  @action async sendFunds(pubKey) {
+    // Get the input element associated with the public key
+    const inputElement = document.getElementById(pubKey);
+
+    // Get the ether amount from the input field
+    const ethAmount = inputElement.value;
+
+    // Call sendFunds function from the libwalletWebService
+    await this.libwalletWebService.sendFunds(pubKey, ethAmount);
+  }
+
+  @action async getFunds(){
+    await this.libwalletWebService.sendFromFaucet();
   }
 
   

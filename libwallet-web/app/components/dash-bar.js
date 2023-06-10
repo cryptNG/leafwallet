@@ -7,7 +7,7 @@ import { tracked } from '@glimmer/tracking';
 export default class Dashboard extends Component {
 
     @service router;
-  
+  @service libwalletWebService;
     @tracked isShowingAddNetworkModal = false;
     
  
@@ -35,11 +35,12 @@ export default class Dashboard extends Component {
       try
       {
           await window.wallet.connect();
+          await window.wallet.registerHandlers();
           await window.wallet.createSession();
           
       if(window.wallet.isConnected)
       {
-        await this.libwalletWebService.setup(window.wallet._provider, window.wallet._libwallet_contract_address, window.wallet._contractAbi, window.wallet.connectedAccount);
+        await this.libwalletWebService.setup(window.wallet._provider, window.wallet._libwallet_contract_address, window.wallet._contractAbi, window.wallet.connectedAccount,window.wallet._provider);
       }
       }
       catch(modalClosed)

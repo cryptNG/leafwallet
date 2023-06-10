@@ -9,13 +9,23 @@
 <DashBar></DashBar>
 
 <div class="page">
-  
+
+  <button {{on 'click' (fn this.getFunds)}}>GIVE 0.1 CETH</button>
     {{#if this.wallet.isConnected}}
     <button {{action "toggleCameraViewModal"}}>Assign new Device</button>
     
     {{else}}
       To participate, press "CONNECT" to connect to your Crypto-Wallet
     {{/if}}
+
+  {{#each this.wallets as |wallet|}}
+  <div class="wallet-info">
+    <p>{{wallet.device}} | {{wallet.balance}}</p>
+    <input type="number" step="0.1" value="0.1" id="{{wallet.device}}" class="eth-input" />
+    <button {{on "click" (fn this.sendFunds wallet.device)}}>Send funds</button>
+  </div>
+{{/each}}
+
 
   
 {{#if this.isShowingCameraViewModal}}
