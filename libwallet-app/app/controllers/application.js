@@ -105,33 +105,60 @@ export default class ApplicationController extends Controller {
 
 
 const jsonRpcUrl = 'https://testnet.cryptng.xyz:8545';
-const contractAddress='0xFF0bD6Db8c52530442685B4752efE9FBd4115f61';
+const contractAddress='0x30eA7f07ec634f798Be062FB2AC5B1C9f25392E2';
 const contractAbi=[
-    {
-      "inputs": [],
-      "name": "isSenderRegistered",
-      "outputs": [
-        {
-          "internalType": "bool",
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function",
-      "constant": true
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "assignee",
-          "type": "address"
-        }
-      ],
-      "name": "assignAddressToSender",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    }
-  ];
+  {
+    "inputs": [],
+    "name": "isSenderRegistered",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "assignee",
+        "type": "address"
+      }
+    ],
+    "name": "assignAddressToSender",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "data",
+        "type": "string"
+      }
+    ],
+    "name": "assignData",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getData",
+    "outputs": [
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
+  }
+];
