@@ -14,6 +14,8 @@ body{
   height: 100vh;
   width: 100vw;
   color: white;
+  max-height: 100vh;
+  overflow:hidden;
   
     
 }
@@ -508,6 +510,7 @@ input {
     background: #99C24D;
     color: black;
     line-height: 2rem;
-    min-width: 10rem;
+    min-width: 8rem;
     border-radius: 10px;
+  
   }
