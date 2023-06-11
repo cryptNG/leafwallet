@@ -60,6 +60,10 @@ export default class ApplicationController extends Controller {
       return this.libwalletMobile.lastMessage;
     }
 
+    get balance(){
+      this.libwalletMobile.balance;
+    }
+
     get isInitialized()
     {
         return this.wallet !== null;

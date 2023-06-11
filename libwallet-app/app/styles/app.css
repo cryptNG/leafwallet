@@ -9,7 +9,7 @@
 
 body{
         
-  background: linear-gradient(#0c2066, #4c9b93);
+  background: linear-gradient(#41BBD9, #006E90);
   margin:0;
   height: 100vh;
   width: 100vw;
@@ -158,33 +158,21 @@ body{
       letter-spacing: 1pt;
     }
 
-div.dashbar
-{
-    top: 0px;
-    left:0px;
-    background-color: #3e3e3ec9;
-    width: 100%;
-    height: 80px;
-    position: fixed;
-    z-index: 2147483647;
-
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-
-
-    -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
-       -moz-animation: fadein 1s; /* Firefox < 16 */
-        -ms-animation: fadein 1s; /* Internet Explorer */
-         -o-animation: fadein 1s; /* Opera < 12.1 */
-            animation: fadein 1s;
-}
-
 div.dashbar a{
     border-bottom:none;
 }
 
+.cryptlogo-banner{
+  margin-left:10px;
+}
+
+.dashbar .balance{
+  font-family: Montserrat, sans-serif;
+}
+
+.wallet-icon {
+  padding-top: 10px;
+}
 
 button.connectbtn
 {
@@ -278,12 +266,6 @@ animation: glow 4s ease-in-out infinite alternate;
 }
 
 
-
-
-
-  
-
-
 .page{
   /* height: 100vh; */
   width: 100vw;
@@ -291,7 +273,7 @@ animation: glow 4s ease-in-out infinite alternate;
   justify-content: center;
   z-index: 1;
   transition: all 0.5s ease-in-out;
-  top: 60px;
+  top: 0px;
   position: relative;
   transition: all .3s ease-out;
 }
@@ -323,19 +305,17 @@ div.footer{
 div.dashbar
 {
     left:0px;
-    background: linear-gradient(82deg, rgba(12,32,102,1) 17%, rgba(76,155,147,1) 44%, rgba(195,224,247,1) 95%);
     box-shadow: 0px 4px 8px 0px rgba(0,0,0, 0.4);
     backdrop-filter: blur(4px);
     width: 100%;
-    height: 60px;
-    position: fixed;
+    height: 50px;
     z-index: 2147483647;
     top: 0px;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-
+    margin-bottom: 10px;
 
     -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
        -moz-animation: fadein 1s; /* Firefox < 16 */

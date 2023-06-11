@@ -14,6 +14,7 @@ export default class LibwalletMobileService extends Service {
 @tracked isRegistered = false;
 @tracked oldMessage = '';
 @tracked lastMessage='';
+@tracked balance=0;
 
   constructor() {
     super(...arguments);

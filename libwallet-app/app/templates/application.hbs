@@ -6,6 +6,11 @@
 	}
 </style>
 
+<div class="dashbar {{unless this.isInitialized "hide"}}">
+    <CryptologoBanner @project="libWallet"></CryptologoBanner>
+    
+    {{#if this.isInitialized}}<Icon class="wallet-icon" @address={{this.wallet.address}} @height=60/>{{/if}}
+</div>
 {{#if this.isNotYetRegistered}}
 <ol class="progress" style="--length: 5" role="list">
 	<li style="--i: {{this.stage}}">
