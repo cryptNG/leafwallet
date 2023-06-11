@@ -56,7 +56,7 @@
       <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
     </filter>
     <filter id="inset-shadow-small" x="-50%" y="-50%" width="200%" height="200%">
-    <feComponentTransfer in=SourceAlpha>
+    <feComponentTransfer in="SourceAlpha">
       <feFuncA type="table" tableValues="1 0" />
     </feComponentTransfer>
     <feGaussianBlur stdDeviation="3"/>
@@ -70,7 +70,7 @@
     </feMerge>
   </filter>
   <filter id="inset-shadow-normal" x="-50%" y="-50%" width="200%" height="200%">
-    <feComponentTransfer in=SourceAlpha>
+    <feComponentTransfer in="SourceAlpha">
       <feFuncA type="table" tableValues="1 0" />
     </feComponentTransfer>
     <feGaussianBlur stdDeviation="8"/>

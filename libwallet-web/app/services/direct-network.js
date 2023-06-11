@@ -79,6 +79,8 @@ export default class DirectNetworkService extends Service {
       }
     ];
     
+  @tracked balance;
+
 
     constructor()
     {
@@ -90,6 +92,7 @@ export default class DirectNetworkService extends Service {
         console.log(this._jsonRpcUrl);
         console.log('provider');
         console.log(this._provider);
+        this.balance = 0;
     }
 
 

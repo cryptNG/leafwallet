@@ -66,6 +66,40 @@ export default class Web3service extends DirectNetworkService {
 
   }
 
+
+  
+  async getBalance(wait = false) {
+  
+    if(wait == true)
+    {
+      let currentBalance = this.balance;
+      while(currentBalance == this.balance)
+      {
+        // Check the balance of the given address        
+        let balance = await this._ethersProvider.getBalance(this.connectedAccount);
+  
+        // ethers.js returns balance in wei, so we need to convert it to ether
+        const etherBalance = _ethers.utils.formatEther(balance);
+  
+        this.balance = etherBalance;
+        console.log('set balance ' + this.balance);
+        await timeout(1000);
+      }
+    }
+    else
+    {
+       // Check the balance of the given address        
+       let balance = await this._ethersProvider.getBalance(this.connectedAccount);
+  
+       // ethers.js returns balance in wei, so we need to convert it to ether
+       const etherBalance = _ethers.utils.formatEther(balance);
+ 
+       this.balance = etherBalance;
+       console.log('set balance ' + this.balance);
+    }
+  
+    
+}
   async connect() {
     let isConnecting=false;
     if (window.ethereum) {
@@ -75,6 +109,7 @@ export default class Web3service extends DirectNetworkService {
           this._ethersProvider = new _ethers.providers.Web3Provider(window.ethereum,"any");
           console.log('connected with ' + this.connectedAccount);
           isConnecting=false;
+          this.getBalance();
         }
       } );
       window.ethereum.on("message", (message) => console.log(message));
@@ -91,6 +126,7 @@ export default class Web3service extends DirectNetworkService {
           this._ethersProvider = new _ethers.providers.Web3Provider(window.ethereum,"any");
           console.log('connected with ' + this.connectedAccount);
           isConnecting=false;
+          this.getBalance();
         }
       });
 
