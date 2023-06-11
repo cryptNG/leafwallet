@@ -277,18 +277,6 @@ animation: glow 4s ease-in-out infinite alternate;
 
 
 
-/* Glow Colors */
-#glow-blue {
-    animation-name: glow-blue;
-  }
-  @-webkit-keyframes glow-blue {
-    from {
-      box-shadow: 0 0 2px #82d7f944, 0 0 10px #82d7f956, 0 0 20px #00a7fb46, 0 0 30prgba(0, 167, 251, 0.411)fb;
-    }
-    to {
-      box-shadow: 0 0 10px #82d7f967, 0 0 20px #5ec9fe67, 0 0 30px #5ec9fe70, 0 0 40px #5ec9fe63;
-    }
-  }
 
 
   
@@ -303,8 +291,12 @@ animation: glow 4s ease-in-out infinite alternate;
   transition: all 0.5s ease-in-out;
   top: 60px;
   position: relative;
+  transition: all .3s ease-out;
 }
 
+.page.hide{
+  top:100vh;
+}
 
   /*  fileupload */
 
@@ -426,6 +418,29 @@ ol.progress p {
     color: black;
 }
 
+@media (max-width: 40em) {
+  ol.progress h3{
+    font-size: 0.9rem;;
+  }
+  ol.progress h3 span{
+    padding:0 3px;
+    display: flex;
+	justify-content: center;
+	align-items: center;
+	flex: 0 0 auto;
+	margin-right: 1rem;
+	width: 1.5rem;
+	height: 1.5rem;
+	padding: 0.5rem;
+	border-radius: 50%;
+	background-color: var(--c1);
+	color: white;
+}
+ol.progress li p{
+  font-size: 0.9rem;
+}
+}
+
 @media (min-width: 40em) {
 	ol.progress li {
 		margin: 3rem auto;
@@ -440,7 +455,7 @@ ol.progress p {
 	ol.progress h3::before {
 		margin-right: 1.5rem;
 	}
-
+}
     @keyframes pulse {
 	0% {
 		transform: scaleX(0.8);
@@ -462,5 +477,37 @@ ol.progress p {
 	}
 
 }
+
+
+.form {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  align-items: center;
+  
+  
 }
 
+.form > input {
+  flex: 1 1 10ch;
+  margin: .5rem;
+  
+
+}
+
+input {
+  border: none;
+  background: hsl(0 0% 93%);
+  border-radius: 10px;
+  padding: .75rem 1rem;
+  
+  background-color: #ADCAD6;
+}
+
+.form button{
+    background: #99C24D;
+    color: black;
+    line-height: 2rem;
+    min-width: 10rem;
+    border-radius: 10px;
+  }

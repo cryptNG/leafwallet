@@ -1,25 +1,53 @@
 <style>
     
 .card {
+  overflow: hidden;
   max-width: 300px;
   min-height: 200px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   font-family: Montserrat, sans-serif;
-  max-width: 500px;
-  height: 300px;
+  min-width: 80vw;
+  min-height: 80vh;
   padding: 35px;
 
   border: 1px solid rgba(255, 255, 255, .25);
   border-radius: 20px;
-  background-color: rgba(255, 255, 255, 0.45);
+  background-color: #006E90;
   box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.25);
 
   backdrop-filter: blur(15px);
+
 }
+
+.card h2 {
+    position: absolute;
+    left: 0;
+    top: -20px;
+    width: 100%;
+    background-color: #F18F01;
+    color:white;
+    padding: 10px;
+} 
+
+
+.card h2 i{
+  font-size: 0.8rem;
+}
+
+.card-content{
+  position: relative;
+  margin-top: 50px;
+}
+
+.card-content h4 {
+    margin-left: 10px;
+    color: #71d5ee;
+}
+
 </style>
 <div class="card">
   {{yield}}
-  <p class="card-footer">@cryptng</p>
+  
 </div>

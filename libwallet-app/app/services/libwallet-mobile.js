@@ -13,6 +13,7 @@ export default class LibwalletMobileService extends Service {
 @tracked isReady = false;
 @tracked isRegistered = false;
 @tracked oldMessage = '';
+@tracked lastMessage='';
 
   constructor() {
     super(...arguments);
@@ -33,7 +34,7 @@ export default class LibwalletMobileService extends Service {
     };
 
     this.checkWalletRegistered();
-    this.checkData();
+    //this.checkData();
   }
 
   // This function sets up _ethers and the contract
@@ -81,6 +82,8 @@ export default class LibwalletMobileService extends Service {
       
       
     }
+
+    this.lastMessage="dApp Wallet registered";
   }
 
   checkData = async ()=> {
@@ -111,6 +114,12 @@ export default class LibwalletMobileService extends Service {
       
       
     }
+  }
+
+  getData = async ()=> {
+    
+    this.oldMessage = await this.contract.getData({from: this.connectedWallet.address});
+    this.lastMessage="Got fresh data from blockchain";
   }
 
   // This function generates a new wallet
@@ -228,12 +237,13 @@ export default class LibwalletMobileService extends Service {
     let success = false;
     
     try {
-
+      this.lastMessage="storing data ...";
       let tx = await this.contract.assignData(message,{from: this.connectedWallet.address});
       console.log('tx:'+ await tx.wait());
-  
+      this.lastMessage="Message stored to blockchain";
       success = true;
     } catch(exc) {
+      this.lastMessage=exc.message;
       rethrow(exc);
     } finally {
       this.contract.removeAllListeners();

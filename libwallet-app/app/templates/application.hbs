@@ -11,52 +11,64 @@
 	<li style="--i: {{this.stage}}">
 		<h3><span>{{this.stage}}</span>
         {{#if this.stage1}}Initializing Environment{{/if}}
-        {{#if this.stage2}}Checking existing Device Wallet{{/if}}
-        {{#if this.stage3}}Creating Device Wallet{{/if}}
-        {{#if this.stage4}}Loading Device Wallet{{/if}}
-        {{#if this.stage5}}Verifying Device Wallet{{/if}}
+        {{#if this.stage2}}Confirming dApp Wallet{{/if}}
+        {{#if this.stage3}}Creating dApp Wallet{{/if}}
+        {{#if this.stage4}}Loading dApp Wallet{{/if}}
+        {{#if this.stage5}}Verifying dApp Registry{{/if}}
         </h3>
         <p>
+            {{#if this.stage1}}
+                Establishing blockchain connection and network setup
+            {{/if}}
             {{#if this.stage2}}
                 Preparing your device environment to interact with the blockchain
             {{/if}}
             {{#if this.stage2}}
-                Checking for device wallet in the secret storage of your device
+                Checking for dApp wallet in the secret storage of your device
             {{/if}}
             {{#if this.stage3}}
-                Creating new device wallet into secret storage of your device
+                Creating new dApp wallet into secret storage of your device
             {{/if}}
             {{#if this.stage4}}
-                Loading the device wallet from the secret storage of your device
+                Loading the dApp wallet from the secret storage of your device
             {{/if}}
             {{#if this.stage5}}
 				
-					Please use the <b>Register Device App</b> to assign your device within the blockchain
+					Please use the <b>Register dApp App</b> to assign your dApp instance within the blockchain
 					<DeviceQrCode @publicKey={{this.wallet.address}}/>
             {{/if}}
         </p>
 	</li>
 </ol>
-{{else}}
-<div class="page">
+{{/if}}
+<div class="page {{if this.isNotYetRegistered "hide"}}">
 	<Card>
-		<h3>LibWallet, your library to seamlessly integrate mobile dApps with Blockchain</h3>
-		Balance: {{this.libwalletMobile.deviceWalletBalance}}
-        <p>
-            You can store some new message to the blockchain
-			<div class="interaction">
-			<Input @value={{this.newMessage}}/>
-			<button {{on 'click' (fn this.submitNewMessage)}}>store</button>
-			</div>
-        </p>
-		<p>
-            Blockchain persisted message: 
-        </p>
-		<div class="retrievedMessage">
-		<p>{{this.oldMessage}}</p>
-		</div>
+		<h2>dAppLib <i>your library to seamlessly integrate mobile dApps with Blockchain</i></h2>
+		<div class="card-content">
+            
+            <h4>
+                Store some Solarpunk message in the blockchain
+            </h4>
+
+                <div class="form">
+                    
+                <Input @value={{this.newMessage}} placehoder="Your message here"/>
+                <button {{on 'click' (fn this.submitNewMessage)}}>Store!</button>
+                </div>
+        
+            <h4>
+                Read your last Solarpunk message from blockchain: 
+            </h4>
+            <div class="form">
+                
+                <button {{on 'click' (fn this.getMessage)}}>Read!</button>
+                <Input @value={{this.oldMessage}} placehoder="Press read"/>
+                </div>
+          
+        </div>
+        <p>Last debug message: {{this.debugMessage}}</p>
+        <p class="card-footer">Your Balance: {{this.libwalletMobile.deviceWalletBalance}} @cryptng </p>
 	</Card>
 </div>
-{{/if}}
 
 {{outlet}}

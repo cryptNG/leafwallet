@@ -56,6 +56,10 @@ export default class ApplicationController extends Controller {
       return this.libwalletMobile.oldMessage;
     }
 
+    get debugMessage(){
+      return this.libwalletMobile.lastMessage;
+    }
+
     get isInitialized()
     {
         return this.wallet !== null;
@@ -101,6 +105,10 @@ export default class ApplicationController extends Controller {
       if(this.newMessage!==''){
         await this.libwalletMobile.assignData(this.newMessage);
       }
+    }
+
+    @action async getMessage(){
+      this.libwalletMobile.getData();
     }
 
 }
