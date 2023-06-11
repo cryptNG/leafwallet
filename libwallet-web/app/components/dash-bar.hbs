@@ -13,6 +13,10 @@
   .shadow:hover .cross{
     stroke:#e41e1e;
   }
+
+  div.modal .description{
+    font-weight: bold;
+  }
 </style>
 <div class="dashbar">
 <CryptologoBanner @project="libWallet"></CryptologoBanner>
@@ -20,12 +24,13 @@
   <div class="connectinfo">
     {{#if this.wallet.isConnected}}
     
-    <div class="fame-balance">
-      {{this.wallet.fameBalance}}
-    </div>
-      <div>
-        <Icon @address={{this.wallet.connectedAccount}} @height=60/>
+      <div {{on 'click' this.toggleIsShowingIconographykModal}} >
+        <Icon @address={{this.wallet.connectedAccount}} @height="60" />
       </div>
+      
+    <div class="fame-balance">
+      {{this.web3service.balance}}
+    </div>
     {{else}}
        <div class="account" id="glow-red" {{on 'click' this.connect}}><b>&lt;</b> CONNECT <b>&gt;</b></div>
     {{/if}}
@@ -51,8 +56,98 @@
         <div class="copyable-entry" {{on 'click' this.toClipBoardBlockExplorer}}>Block-Explorer: https://yitc.ddns.net:4000/</div>
       </div>
     </div>
+    
+<div id="instruction" class="blink_me" style="display: none;">
+  Please check your MetaMask extension for confirmation.
+</div>
+
+    <button id="connectAddNetworkBtn" type="button">Connect & Add Network</button>
+
    <button class="mobile" type="button" {{on 'click' this.closeAddNetworkModal}}>
         CLOSE
       </button>
+
+      
+<script>
+document.getElementById('connectAddNetworkBtn').addEventListener('click', async function() {
+    
+document.getElementById('instruction').style.display = 'block';
+  if (typeof window.ethereum !== 'undefined') {
+    try {
+      // First ask user to connect their MetaMask
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+      const chainId = '0x539'; // This is 1337 in hexadecimal
+
+      try {
+        // Then try to switch to the new network, if it was already added this will work and not throw an error
+        await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId }]
+        });
+        
+      } catch (switchError) {
+        // If the switch fails (which it will if the network wasn't added yet), add the new network
+        if (switchError.code === 4902) {
+          await window.ethereum.request({
+            method: 'wallet_addEthereumChain',
+            params: [
+              {
+                chainId,
+                chainName: 'CryptNG-TestNet',
+                nativeCurrency: {
+                  name: 'CryptNG Ethereum',
+                  symbol: 'CETH',
+                  decimals: 18
+                },
+                rpcUrls: ['https://testnet.cryptng.xyz:8545'],
+                blockExplorerUrls: ['https://yitc.ddns.net:4000/']
+              }
+            ]
+          });
+
+          // After adding the network, switch to it
+          await window.ethereum.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId }]
+          });
+          
+        } else {
+          throw switchError;
+        }
+      }
+
+      console.log('Network switched!');
+
+    } catch (error) {
+      console.error(error);
+    }
+  } else {
+    console.log('MetaMask is not installed!');
+  }
+  
+});
+
+</script>
   </ModalDialog>
+{{/if}}
+
+
+{{#if this.isShowingIconographyModal}}
+<ModalDialog>
+   <div class="modal">
+      <div class="description">
+        Unique Icons for each Wallet Address (highly distincitve, like hashes!)
+      </div>
+      <div class="modalbody">
+         Our own CG wrote the code to create these beautiful unique icons for each wallet address.<br/>
+      This is part of our ecosystem, find out what beautiful patterns your wallet address is hiding!
+     
+      </div>
+    </div>
+    
+   <button class="closeicon" type="button" {{on 'click' this.closeIconographyModal}}>
+        CLOSE
+      </button>
+</ModalDialog>
 {{/if}}

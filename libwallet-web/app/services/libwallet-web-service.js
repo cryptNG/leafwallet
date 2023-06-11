@@ -5,6 +5,7 @@ import { rethrow } from 'rsvp';
 import { timeout } from 'ember-concurrency';
 
 export default class LibwalletWebService extends Service {
+  @service web3service;
     _networkProvider = null;
     _libwalletContract = null;
     _connectedAccount = null;
@@ -35,22 +36,6 @@ export default class LibwalletWebService extends Service {
     let success = false;
     
     try {
-      //let currentGasPrice = await this._networkProvider.getGasPrice();
-      //console.debug('currentGasPrice: ' + currentGasPrice);
-  
-    //   const estimatedGas = await this._directNetworkContract.estimateGas.assignAddressToSender(_ethers.utils.hexlify(address));
-    //   console.debug('estimatedGas: ' + estimatedGas);
-  
-    //   console.debug('ETH-ADDRESS: ' + this._connectedAccount);
-  
-    //   let options = {
-    //     gasPrice: currentGasPrice,
-    //     gasLimit: estimatedGas,
-    //   };
-    // console.log(this._libwalletContract.methods.assignAddressToSender(pubKey).encodeABI());
-
-    // console.log(this._libwalletContract.methods.assignAddressToSender(pubKey+'000000000000000000000000').encodeABI())
-    
       let address = _ethers.utils.getAddress(pubKey);
       let tx = await this._libwalletContract.assignAddressToSender(address);
       console.log('tx:'+ await tx.wait());
@@ -89,6 +74,7 @@ export default class LibwalletWebService extends Service {
             balance: balance
         });
     }
+    await this.web3service.getBalance();
     
     return devicesWithBalances;
 }
@@ -122,6 +108,7 @@ export default class LibwalletWebService extends Service {
 
     // Wait for the transaction to be mined
     const receipt = await tx.wait();
+        await this.web3service.getBalance(receipt.gasUsed.gt(0));
 
     console.log(`Transaction ${receipt.transactionHash} mined in block ${receipt.blockNumber}`);
   }
@@ -141,9 +128,11 @@ export default class LibwalletWebService extends Service {
 
     // Wait for the transaction to be mined
     const receipt = await tx.wait();
+    await this.web3service.getBalance(receipt.gasUsed.gt(0));
 
     console.log(`Transaction ${receipt.transactionHash} mined in block ${receipt.blockNumber}`);
   }
+
 
 
 }
