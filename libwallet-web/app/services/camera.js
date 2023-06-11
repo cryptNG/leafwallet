@@ -52,7 +52,7 @@ export default class Camera extends Service {
         this.videoStream.getTracks().forEach(track => track.stop()); // Stop the MediaStream
         this._validKeyReceivedCallBack(this.qrCode);
       } else {
-        window.alert("QR code is not a valid Ethereum public key");
+        console.log("QR code is not a valid Ethereum public key");
       }
     }
 
