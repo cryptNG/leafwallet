@@ -51,7 +51,3 @@ We encourage you to contribute to LibWallet! Please check out the [Contributing 
 ## License
 
 LibWallet is released under the [MIT License](LICENSE).
-
----
-
-You can adjust the sections and contents according to your project's needs. Please remember to add a `CONTRIBUTING.md` file if you mention it in the readme, otherwise remove or comment out that line. The same goes for the documentation link and the license file.
