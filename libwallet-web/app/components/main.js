@@ -29,22 +29,22 @@ export default class MainComponent extends Component {
   @action
   async showCameraViewModal() {
     this.isShowingCameraViewModal = true;
-    if (this.camera) { // Check if the camera object exists
-      if (this.camera.videoStream) { // Check if existing camera video stream exists
-        this.camera.videoStream.getTracks().forEach(track => track.stop()); // Stop the video feed when the modal is opened
-        this.camera.videoStream = null; // Reset the videoStream in the camera service
-      }
-      await this.camera.prepareVideo(); // Initiate the video feed when the modal is opened
+    if (this.camera) {
+      await this.camera.prepareVideo();
     }
   }
-  
   @action
   hideCameraViewModal() {
-    this.isShowingCameraViewModal = false;
-    this.camera.videoStream.getTracks().forEach(track => track.stop()); // Stop the video feed when the modal is closed
-    this.camera.videoStream = null; // Reset the videoStream in the camera service
+    if (this.camera && this.camera.videoStream) {
+      // Stop all tracks.
+      this.camera.videoStream.getTracks().forEach(track => track.stop());
+      // Reset the stream
+      this.camera.videoStream = null;
+      this.camera.video.srcObject = null; // set video srcObject to null
+      this.camera.ctx.clearRect(0, 0, this.camera.canvas.width, this.camera.canvas.height);  // clear the canvas           
+    }
+    this.isShowingCameraViewModal = false;  
   }
-
 
   @action async handleValidKey(pubKey) {
     if (!pubKey) {
@@ -55,11 +55,11 @@ export default class MainComponent extends Component {
             this.modalText = 'Scan the QR Code presented in the MetaTrail app on your device';
         }, 2000);
     } else {
-        setTimeout(() => {
-            this.toggleCameraViewModal();
-            this.assignNewDevice(pubKey); // Moved into the timeout
-            this.getAllDevices();
-        }, 1000);
+      setTimeout(() => {
+        this.hideCameraViewModal();
+        this.assignNewDevice(pubKey);
+        this.getAllDevices();
+      }, 1000);
     }
 }
 
@@ -73,30 +73,6 @@ export default class MainComponent extends Component {
     this.wallets = await this.libwalletWebService.getAllDevicesOfSender();
   }
   
-  @action
-async toggleCameraViewModal() {
-    // If the modal is currently open, close any streams and then close the modal
-    if (this.isShowingCameraViewModal) {
-        const mediaStream = this.camera.get('stream');
-        if (mediaStream) {
-            // Stop all tracks of the stream
-            mediaStream.getTracks().forEach(track => track.stop());
-        }
-
-        this.camera.set('stream', null); // Reset "stream" property for a fresh start next time
-        this.isShowingCameraViewModal = false;
-    } 
-    // If the modal is currently closed, open the modal and set up the stream
-    else {
-        this.isShowingCameraViewModal = true;
-
-        // Await a short delay to ensure the stream is properly closed
-        // before attempting to re-initialize it.
-        await new Promise(resolve => setTimeout(resolve, 500));  
-        
-        this.camera.prepareVideo(); // Initiate the video feed when the modal is reopened
-    }
-}
 
   @action async sendFunds(pubKey) {
     // Get the input element associated with the public key

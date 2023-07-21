@@ -56,41 +56,55 @@ this.isLoading = false;
     this.ctx.drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height);
     let imageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
     let code = jsQR(imageData.data, imageData.width, imageData.height);
-    
+
+    // If a QR code is detected store its detection time along with its data.
     if (code) {
-      let key = this.parseEthereumPublicKey(code.data);
-      
-      this.ctx.beginPath();
-      this.ctx.moveTo(code.location.topLeftCorner.x, code.location.topLeftCorner.y);
-      this.ctx.lineTo(code.location.topRightCorner.x, code.location.topRightCorner.y);
-      this.ctx.lineTo(code.location.bottomRightCorner.x, code.location.bottomRightCorner.y);
-      this.ctx.lineTo(code.location.bottomLeftCorner.x, code.location.bottomLeftCorner.y);
-      this.ctx.lineTo(code.location.topLeftCorner.x, code.location.topLeftCorner.y);
-      this.ctx.lineWidth = 4;
-      this.ctx.strokeStyle = 'yellow';
-      this.ctx.stroke();
+        this.lastSuccessfulDetection = {
+            code: code,
+            timeStamp: performance.now()
+        };
+    }
 
-      if (key) {
-        console.log("Decoded QR code:", code.data);
-        this.qrCode = key; // Store only the public key part
-        this.video.pause(); // Stop the video stream
-        this.videoStream.getTracks().forEach(track => track.stop()); // Stop the MediaStream
+    // Fall back to the last successful detection if it happened in the last 200ms.
+    if (this.lastSuccessfulDetection && performance.now() - this.lastSuccessfulDetection.timeStamp < 200) {
+        code = this.lastSuccessfulDetection.code
+    }
 
-    
-        // Use a SetTimeout to delay the _validKeyReceivedCallBack call
-        setTimeout(() => {
-            this._validKeyReceivedCallBack(this.qrCode);
-        }, 2000);
+    // Only continue if a code is available (either detected now, or the fallback one)
+    if (code) {
+        let key = this.parseEthereumPublicKey(code.data);
+
+        // Draw a semi-transparent black overlay over the entire video
+        this.ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+        // Calculate bounding box for QR code
+        let left = Math.min(code.location.topLeftCorner.x, code.location.bottomLeftCorner.x);
+        let right = Math.max(code.location.topRightCorner.x, code.location.bottomRightCorner.x);
+        let top = Math.min(code.location.topLeftCorner.y, code.location.topRightCorner.y);
+        let bottom = Math.max(code.location.bottomLeftCorner.y, code.location.bottomRightCorner.y);
+
+        // Draw the captured video only in area of the QR code
+        this.ctx.drawImage(this.video, left, top, right - left, bottom - top, left, top, right - left, bottom - top);
+
+        if (key) {
+            console.log("Decoded QR code:", code.data);
+            this.qrCode = key; // Store only the public key part
+            this.video.pause(); // Stop the video stream
+            this.videoStream.getTracks().forEach(track => track.stop()); // Stop the MediaStream
+
+            // SetTimeout to delay the _validKeyReceivedCallBack call
+              this._validKeyReceivedCallBack(this.qrCode);
       } else {
-        this._validKeyReceivedCallBack(null);
+          this._validKeyReceivedCallBack(null);
       }
-    }
-
-    if (!this.video.paused && !this.video.ended) {
-      window.requestAnimationFrame(this.scanQRCode.bind(this));
-    }
   }
 
+  // Request animation frame to keep scanning
+  if (!this.video.paused && !this.video.ended) {
+      window.requestAnimationFrame(this.scanQRCode.bind(this));
+  }
+}
   parseEthereumPublicKey(data) {
     let key = data;
     if (key.startsWith('ethereum:')) {

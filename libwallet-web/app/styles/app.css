@@ -8,16 +8,20 @@
     font-display: swap;
 }
 
-body{
-        
-  background: linear-gradient(#0c2066, #4c9b93);
-  margin:0;
-  height: 100vh;
-  width: 100vw;
-  color: white;
+body {
+  margin: 0;
+  height: 100%;
   
-    
+  backdrop-filter: blur(10px);
+  color: white;
+  overflow-x: hidden;
+  background:
+    radial-gradient(ellipse at center, rgba(255,255,255,0.1) 0%, rgba(12,32,102,0.6) 70%, rgba(12,32,102,1) 100%), 
+    linear-gradient(to right, #0c2066, #4c9b93); /* Adjusted these colors to match the previous gradient */
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
+
 
 #world-svg{
   position:fixed;
@@ -175,18 +179,13 @@ animation: glow 4s ease-in-out infinite alternate;
 
   
 
-
-.page{
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  z-index: 1;
-  align-items: center;
-  transition: all 0.5s ease-in-out;
-  top: 50%;
-  left:0px;
+  .page {
+    flex: 1 0 auto;
+    padding: 60px 20px 20px; /* Adjust the top padding  */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: calc(100% - 40px);
 }
 
 
@@ -235,13 +234,20 @@ button.mobile
 
 
 
-div.footer{
-    position: absolute;
-    bottom: 15px;
-    font-size: small;
+.footer {
+  position: sticky; /* This will make it stick in one place */
+  bottom: 0; /* Pulls the footer down to the bottom of the page */
+  left: 0; /* Pulls the footer to the left side of the page */
+  flex-shrink: 0;
+  width:100%;
+  padding:1rem;
+  text-align: left; /* Align text to the left */
 }
 
-
+.footer a
+{
+  color: lightblue;
+}
 /* */
 
 
@@ -253,7 +259,7 @@ div.dashbar
     backdrop-filter: blur(4px);
     width: 100%;
     height: 60px;
-    position: fixed;
+    position: sticky;
     z-index: 2147483647;
     top: 0px;
     display: flex;
