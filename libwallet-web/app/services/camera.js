@@ -8,55 +8,84 @@ export default class Camera extends Service {
   @tracked canvas;
   @tracked ctx;
   @tracked qrCode = null;
-
+  @tracked isLoading = true;
   _validKeyReceivedCallBack = null;
+  
   constructor() {
     super(...arguments);
-    this.video = document.createElement('video');
-    this.canvas = document.createElement('canvas');
+    this.video = document.createElement('video'); // Create the video element here
+  }
+
+  async prepareCanvas(validKeyReceivedCallBack, canvasElement) {
+    this.canvas = canvasElement; // instead of creating a new one, we use the existing one
+    this.canvas.willReadFrequently = true; // optimize performance on frequent reads
     this.ctx = this.canvas.getContext('2d');
-  }
-
-  async prepare(validKeyReceivedCallBack) {
-    let stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
-    this.videoStream = stream;
-    
-    // Set the source of the video element to be the stream
-    this.video.srcObject = stream;
-    
-    // Once the video metadata has loaded, set the dimensions of the canvas
-    this.video.onloadedmetadata = () => {
-      this.video.play();
-      this.canvas.width = this.video.videoWidth;
-      this.canvas.height = this.video.videoHeight;
-      this.scanQRCode();
-    };
-
     this._validKeyReceivedCallBack = validKeyReceivedCallBack;
+    
+    // Call prepareVideo from here
+    await this.prepareVideo();
   }
 
-  scanQRCode() {
-    // Draw the current frame of the video onto the canvas
-    this.ctx.drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height);
+  async prepareVideo() {
+    this.isLoading = true;
+    if (!this.videoStream) {
+      let stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+      this.videoStream = stream;
+  
+      // Set the source of the video element to be the stream
+      this.video.srcObject = stream;
+  
+      // Once the video metadata has loaded, set the dimensions of the canvas
+      this.video.onloadedmetadata = () => {
+        this.video.play();
 
-    // Get Image Data
+        
+        this.video.width = 640;
+        this.video.height = 480;
+
+        this.canvas.width = this.video.videoWidth;
+        this.canvas.height = this.video.videoHeight;
+        this.scanQRCode();
+      };
+    }
+    
+this.isLoading = false;
+  }
+  
+  scanQRCode() {
+    this.ctx.drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height);
     let imageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
     let code = jsQR(imageData.data, imageData.width, imageData.height);
     
     if (code) {
       let key = this.parseEthereumPublicKey(code.data);
+      
+      this.ctx.beginPath();
+      this.ctx.moveTo(code.location.topLeftCorner.x, code.location.topLeftCorner.y);
+      this.ctx.lineTo(code.location.topRightCorner.x, code.location.topRightCorner.y);
+      this.ctx.lineTo(code.location.bottomRightCorner.x, code.location.bottomRightCorner.y);
+      this.ctx.lineTo(code.location.bottomLeftCorner.x, code.location.bottomLeftCorner.y);
+      this.ctx.lineTo(code.location.topLeftCorner.x, code.location.topLeftCorner.y);
+      this.ctx.lineWidth = 4;
+      this.ctx.strokeStyle = 'yellow';
+      this.ctx.stroke();
+
       if (key) {
         console.log("Decoded QR code:", code.data);
         this.qrCode = key; // Store only the public key part
         this.video.pause(); // Stop the video stream
         this.videoStream.getTracks().forEach(track => track.stop()); // Stop the MediaStream
-        this._validKeyReceivedCallBack(this.qrCode);
+
+    
+        // Use a SetTimeout to delay the _validKeyReceivedCallBack call
+        setTimeout(() => {
+            this._validKeyReceivedCallBack(this.qrCode);
+        }, 2000);
       } else {
-        console.log("QR code is not a valid Ethereum public key");
+        this._validKeyReceivedCallBack(null);
       }
     }
 
-    // Repeat scan as long as video is playing
     if (!this.video.paused && !this.video.ended) {
       window.requestAnimationFrame(this.scanQRCode.bind(this));
     }
@@ -68,10 +97,8 @@ export default class Camera extends Service {
       key = key.slice(9);
     }
 
-    // Split on '@' character and consider only the first part as the public key
     key = key.split('@')[0];
 
-    // Validate and return the key if it's a valid Ethereum public key
     try {
       _ethers.utils.getAddress(key);
       return key;

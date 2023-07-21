@@ -1,8 +1,62 @@
 
 <style>
+.camera-container {
+    position: relative;
+    width: 640px;
+    height: 480px;
+}
 
+.loading-spinner {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+}
+
+.spinner {
+    /* Ensure spinner doesn't exceed the container's dimensions */
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.camera {
+    position: relative;
+    z-index: 1;
+    /* Ensure video doesn't exceed the container's dimensions */
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.loading-spinner {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+
+.camera {
+  position: relative;
+  z-index: 1;
+}
     div.video-controls{
     color: black;
+}
+
+p.modal
+{
+  height: 3rem;
+  line-height: 3rem;
+  color: black;
+  text-align: center;
+}
+
+p.modal.warn
+{
+  background-color: red;
+  color: white;
+  border-radius: 20px;
 }
 </style>
 
@@ -12,7 +66,7 @@
 
   <button type="button" {{on 'click' this.getFunds}}>GIVE 0.1 CETH</button>
     {{#if this.wallet.isConnected}}
-    <button type="button" {{action "toggleCameraViewModal"}}>Assign new Device</button>
+   <button type="button" {{action "showCameraViewModal"}}>Assign new Device</button>
     
     {{else}}
       To participate, press "CONNECT" to connect to your Crypto-Wallet
@@ -27,11 +81,20 @@
 {{/each}}
 
 
-  
-{{#if this.isShowingCameraViewModal}}
- <ModalDialog @onClose={{action "toggleCameraViewModal"}} @targetAttachment="center" @translucentOverlay={{true}}>
-  <CameraView @validKeyReceived={{this.handleValidKey}}></CameraView>
-  <p>Scan the QR Code presented in the MetaTrail app on your device</p>
+  {{#if this.isShowingCameraViewModal}}
+  <ModalDialog @onClose={{action "hideCameraViewModal"}} @targetAttachment="center" @translucentOverlay={{true}}>
+    <div class="camera-container">
+      {{#if this.camera.isLoading}}
+        <div class="loading-spinner">
+          <LoadingSpinner />
+        </div>
+      {{/if}}
+      
+      <CameraView @validKeyReceived={{this.handleValidKey}}></CameraView>
+    </div>
+    
+    <p class="modal {{this.warnClass}}">{{this.modalText}}</p>
+    <button type="button" {{on 'click' this.toggleCameraViewModal}}>X</button>
   </ModalDialog>
 {{/if}}
 
