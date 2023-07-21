@@ -32,24 +32,26 @@ export default class LibwalletWebService extends Service {
     this._faucet=faucet;
    }
 
+   
    async registerWallet(pubKey) {
-    let success = false;
-    
+    let txResponse = null;
+
     try {
-      let address = _ethers.utils.getAddress(pubKey);
-      let tx = await this._libwalletContract.assignAddressToSender(address);
-      console.log('tx:'+ await tx.wait());
+        let address = _ethers.utils.getAddress(pubKey);
+        let tx = await this._libwalletContract.assignAddressToSender(address);
+        await tx.wait();
+        console.log('tx:'+ await tx.wait());
   
-      success = true;
+        txResponse = tx;
     } catch(exc) {
-      rethrow(exc);
+        rethrow(exc);
     } finally {
-      this._libwalletContract.removeAllListeners();
+        this._libwalletContract.removeAllListeners();
     }
-  
-    return success;
-  }
-  
+
+    return txResponse;
+}
+
    
   async assignAddressToSender(pubKey)
   {

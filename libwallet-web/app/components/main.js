@@ -12,7 +12,7 @@ export default class MainComponent extends Component {
   @tracked isShowingCameraViewModal = false;
   @tracked warnClass = '';
   @tracked modalText = 'Scan the QR Code presented in the MetaTrail app on your device';
-
+  @tracked awaitingFunds = false;
   @tracked wallets;
 
   constructor(){
@@ -63,10 +63,42 @@ export default class MainComponent extends Component {
     }
 }
 
-  async assignNewDevice(pubKey)
-  {
-   await this.libwalletWebService.registerWallet(pubKey);
+async assignNewDevice(pubKey) {
+  let tx = await this.libwalletWebService.registerWallet(pubKey);
+  if(tx) {
+    await tx.wait();
+      
+    // Fetch all devices
+    await this.getAllDevices();
+
+    // Mark the new wallet as 'new'
+    const newWalletIndex = this.wallets.findIndex(x => x.device === pubKey);
+    if (newWalletIndex !== -1) {
+      // Create a new array with the updated wallet
+      const newWallets = this.wallets.map((wallet, index) => {
+        if (index === newWalletIndex) {
+          return { ...wallet, isNew: true };
+        }
+        return wallet;
+      });
+      
+      // Set wallets to the new array
+      this.wallets = newWallets;
+
+      // Remove the 'new' marker after some time
+      setTimeout(() => {
+        if (this.wallets[newWalletIndex]) {
+          this.wallets = this.wallets.map((wallet, index) => {
+            if (index === newWalletIndex) {
+              return { ...wallet, isNew: false };
+            }
+            return wallet;
+          });
+        }
+      }, 3000); // Adjust the timeout as per your requirement
+    }
   }
+}
 
   async getAllDevices()
   {
@@ -86,6 +118,8 @@ export default class MainComponent extends Component {
   }
 
   @action async getFunds(){
+    this.awaitingFunds = true;
     await this.libwalletWebService.sendFromFaucet();
+    this.awaitingFunds = false;
   }
 }

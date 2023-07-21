@@ -1,4 +1,14 @@
 <style>
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.blink {
+  animation: blink 1s linear 3; /* Blink every second, 3 times */
+}
+
   .shadow {
     -webkit-filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .7));
     filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .7));
@@ -19,7 +29,7 @@
   }
 </style>
 <div class="dashbar">
-<CryptologoBanner @project="libWallet"></CryptologoBanner>
+<CryptologoBanner @project="LeafWallet"></CryptologoBanner>
   
   <div class="connectinfo">
     {{#if this.wallet.isConnected}}
@@ -28,9 +38,10 @@
         <Icon @address={{this.wallet.connectedAccount}} @height="60" />
       </div>
       
-    <div class="fame-balance">
-      {{this.web3service.balance}}
-    </div>
+<div class="fame-balance {{if this.shouldBlink 'blink'}}" 
+     {{did-update this.balanceUpdated this.web3service.balance}}>
+  {{this.web3service.balance}}
+</div>
     {{else}}
        <div class="account" id="glow-red" {{on 'click' this.connect}}><b>&lt;</b> CONNECT <b>&gt;</b></div>
     {{/if}}
