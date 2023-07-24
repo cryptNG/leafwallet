@@ -20,6 +20,7 @@ export default class MainComponent extends Component {
     this.getAllDevices();
   }
 
+  
   get wallet(){
     return window.wallet;
   }
@@ -100,8 +101,10 @@ async assignNewDevice(pubKey) {
   }
 }
 
+@action
   async getAllDevices()
   {
+    console.log('getalldevices');
     this.wallets = await this.libwalletWebService.getAllDevicesOfSender();
   }
   
@@ -115,7 +118,38 @@ async assignNewDevice(pubKey) {
 
     // Call sendFunds function from the libwalletWebService
     await this.libwalletWebService.sendFunds(pubKey, ethAmount);
+
+    
+    await this.getAllDevices();
+    
+    // Mark the updated wallet as 'new'
+    const newWalletIndex = this.wallets.findIndex(x => x.device === pubKey);
+    if (newWalletIndex !== -1) {
+      // Create a new array with the updated wallet
+      const newWallets = this.wallets.map((wallet, index) => {
+        if (index === newWalletIndex) {
+          return { ...wallet, isNew: true };
+        }
+        return wallet;
+      });
+      
+      // Set wallets to the new array
+      this.wallets = newWallets;
+
+      // Remove the 'new' marker after some time
+      setTimeout(() => {
+        if (this.wallets[newWalletIndex]) {
+          this.wallets = this.wallets.map((wallet, index) => {
+            if (index === newWalletIndex) {
+              return { ...wallet, isNew: false };
+            }
+            return wallet;
+          });
+        }
+      }, 3000); 
+    }
   }
+
 
   @action async getFunds(){
     this.awaitingFunds = true;

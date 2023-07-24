@@ -227,7 +227,12 @@ export default class LibwalletMobileService extends Service {
     });
   }
 
-
+  async trackBalance(timeMillis) {
+    setInterval(async () => {
+      await this.getBalance();
+    }, timeMillis);
+  }
+  
   @tracked deviceWalletBalance = 0;
   async getBalance()
   {

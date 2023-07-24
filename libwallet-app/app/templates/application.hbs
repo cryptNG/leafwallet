@@ -1,5 +1,43 @@
 {{page-title "LibwalletApp"}}
 <style>
+@keyframes blink {
+  0% { color: red; }
+  50% { color: transparent; }
+  100% { color: red; }
+}
+
+.blinking {
+  animation: blink 0.5s linear infinite;
+}
+
+div.debug{
+overflow: scroll;
+    height: 150px;
+    border-radius: 10px;
+    border: 1px dotted white;
+    padding: 5px;
+}
+
+.debug-title{
+    margin-top:1rem;
+}
+
+.balance-footer
+{
+    
+    display: flex;
+    position: fixed;
+    bottom: 0px;
+}
+
+.balance-change{
+    font-size: small;
+    color: beige;
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+}
+
     .retrievedMessage
 	{		
     color: bisque;
@@ -39,7 +77,7 @@
             {{/if}}
             {{#if this.stage5}}
 				
-					Please use the <b>Register dApp App</b> to assign your dApp instance within the blockchain
+					Please use the <a href="https://leafwallet-reg.cryptng.com/"><b>Leaf-Wallet Register App</b></a> to assign your dApp instance within the blockchain
 					<DeviceQrCode @publicKey={{this.wallet.address}}/>
             {{/if}}
         </p>
@@ -71,9 +109,22 @@
                 </div>
           
         </div>
-        <p>Last debug message: {{this.debugMessage}}</p>
-        <p class="card-footer">Your Balance: {{this.libwalletMobile.deviceWalletBalance}} @cryptng </p>
+        <div class="debug-title">Last debug message:</div>
+        <div class="debug">{{this.debugMessage}}</div>
+        
+        <div class="balance-footer">
+            <div>Your Balance  @cryptng:</div>&nbsp;
+<div class="balance {{if this.shouldBlink 'blinking'}}">{{this.balance}} </div>
+      
+        </div>
+     
+     
+
+
+
 	</Card>
+     <div class="balance-change {{if this.shouldBlink 'blinking'}}" 
+     {{did-update this.balanceUpdated this.balance}}> {{this.balanceChange}} </div>
 </div>
 
 {{outlet}}

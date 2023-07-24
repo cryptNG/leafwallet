@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
+import { debounce } from '@ember/runloop';
 
 function timeout(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -61,8 +62,9 @@ export default class ApplicationController extends Controller {
     }
 
     get balance(){
-      this.libwalletMobile.balance;
+      return this.libwalletMobile.deviceWalletBalance;
     }
+    
 
     get isInitialized()
     {
@@ -90,10 +92,52 @@ export default class ApplicationController extends Controller {
         before = Date.now();
         this.stage=4;
         this.wallet = await this.libwalletMobile.loadWallet();
+        this.libwalletMobile.trackBalance(30000); 
         before = Date.now();
         this.stage= this.libwalletMobile.isRegistered?6:5;
 
     }
+
+@tracked shouldBlink = false;
+lastBalance = 0;
+@tracked balanceChange = '';
+
+
+@tracked isFirstRun = true;
+
+@action
+balanceUpdated(element, newBalance) {
+  // Check if new balance is the same as old balance or if it's the first run
+  if (this.lastBalance === newBalance[0] || this.isFirstRun) {
+    this.isFirstRun = false;
+    this.lastBalance = newBalance[0];
+    this.balanceChange = '';
+    return;  // If it's the same or the first run, simply return and don't blink
+  }
+
+  // Calculate the change in balance
+  let balanceChange = newBalance[0] - this.lastBalance;
+  if (balanceChange < 0) {
+    // Balance decreased
+    this.balanceChange = `[${balanceChange}]`;  // Balance change will be negative
+  } else {
+    // Balance increased
+    this.balanceChange = `[+${balanceChange}]`;
+  }
+
+  // Update the last balance and start blinking
+  this.lastBalance = newBalance[0];
+  this.shouldBlink = true;
+
+  debounce(this, this.stopBlinking, 3000);
+}
+
+
+
+  stopBlinking() {
+    this.shouldBlink = false;
+  }
+
 
     get isNotYetRegistered()
     {

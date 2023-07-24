@@ -2,6 +2,12 @@
 
 <style>
 
+div.loading-spinner.large div.spinner
+{
+width: 100px;
+height: 100px;
+}
+
 button.assign{
 border-radius: 50px;
 margin: 10px;
@@ -160,28 +166,32 @@ display: flex;
   {{/if}}
       </button>
   </div>
-
- {{#if this.wallet.isConnected}}
-{{#each this.wallets as |wallet index|}}
- 
-<div class="wallet-info {{if wallet.isNew 'new-wallet'}}">
-       <div class="wallet-icon">
-            <Icon @address={{wallet.device}} @height="50" />
-       </div>
-       <div class="app-name">
-            webApp #{{increment index}}
-       </div>
-       <div class="wallet-balance">
-            {{wallet.balance}}
-       </div>
-       <div>
-            <input type="number" step="0.1" value="0.1" id="{{wallet.device}}" class="eth-input" />
-            <button type="button" {{on "click" (fn this.sendFunds wallet.device)}}>Send funds</button>
-       </div>
+{{#if this.wallet.isConnected}}
+  {{#if this.wallets.length}}
+    {{#each this.wallets as |wallet index|}}
+      <div class="wallet-info {{if wallet.isNew 'new-wallet'}}">
+        <div class="wallet-icon">
+          <Icon @address={{wallet.device}} @height="50" />
+        </div>
+        <div class="app-name">
+          webApp #{{increment index}}
+        </div>
+        <div class="wallet-balance">
+          {{wallet.balance}}
+        </div>
+        <div>
+          <input type="number" step="0.1" value="0.1" id="{{wallet.device}}" class="eth-input" />
+          <button type="button" {{on "click" (fn this.sendFunds wallet.device)}}>Send funds</button>
+        </div>
+      </div>
+    {{/each}}
+  {{else}}
+    <div class="loading-spinner large">
+      <LoadingSpinner />
     </div>
-{{/each}}
+  {{/if}}
 {{else}}
-    <p>To participate, press "CONNECT" to connect to your Crypto-Wallet</p>
+  <p>To participate, press "CONNECT" to connect to your Crypto-Wallet</p>
 {{/if}}
 
   {{#if this.isShowingCameraViewModal}}

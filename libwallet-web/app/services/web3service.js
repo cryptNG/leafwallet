@@ -100,50 +100,59 @@ export default class Web3service extends DirectNetworkService {
   
     
 }
-  async connect() {
-    let isConnecting=false;
-    if (window.ethereum) {
-      window.ethereum.on("accountsChanged", (accounts) =>{
-        if (accounts.length > 0) {
-          this.connectedAccount = window.ethereum.selectedAddress;
-          this._ethersProvider = new _ethers.providers.Web3Provider(window.ethereum,"any");
-          console.log('connected with ' + this.connectedAccount);
-          isConnecting=false;
-          this.getBalance();
-        }
-      } );
-      window.ethereum.on("message", (message) => console.log(message));
-      window.ethereum.on("disconnect", (error) => {
-        console.log(`Disconnected from network ${error}`);
-        this.connectedAccount = null;
-      });
-     
-      isConnecting=true;
-      window.ethereum.request({ method: 'eth_requestAccounts' }).then((accounts) => 
-      {
-        if (accounts.length > 0) {
-          this.connectedAccount = window.ethereum.selectedAddress;
-          this._ethersProvider = new _ethers.providers.Web3Provider(window.ethereum,"any");
-          console.log('connected with ' + this.connectedAccount);
-          isConnecting=false;
-          this.getBalance();
-        }
-      });
-
-      let failCounter=0;
-        while(isConnecting && failCounter<30000){
-          await timeout(10);
-          failCounter++;
-        }
-
-        if(isConnecting){
-          throw new Error("Connection Issue");
-        }
-
-    } else {
-      console.error("Install MetaMask.");
+async connect() {
+  let isConnecting=false;
+  if (window.ethereum) {
+    let accountsChangedHandler = (accounts) =>{
+      if (accounts.length > 0) {
+        this.connectedAccount = window.ethereum.selectedAddress;
+        this._ethersProvider = new _ethers.providers.Web3Provider(window.ethereum,"any");
+        console.log('connected with ' + this.connectedAccount);
+        isConnecting=false;
+        this.getBalance();
+        // remove the event listener after it is triggered
+        window.ethereum.removeListener('accountsChanged', accountsChangedHandler);
+      }
     }
+    window.ethereum.on("accountsChanged", accountsChangedHandler);
+    window.ethereum.on("message", (message) => console.log(message));
+    window.ethereum.on("disconnect", (error) => {
+      console.log(`Disconnected from network ${error}`);
+      this.connectedAccount = null;
+    });
+    
+    isConnecting=true;
+    window.ethereum.request({ method: 'eth_requestAccounts' }).then((accounts) => 
+    {
+      if (accounts.length > 0) {
+        this.connectedAccount = window.ethereum.selectedAddress;
+        this._ethersProvider = new _ethers.providers.Web3Provider(window.ethereum,"any");
+        console.log('connected with ' + this.connectedAccount);
+        isConnecting=false;
+        this.getBalance();
+      }
+    }).catch((err) => {
+      console.error(err);
+      isConnecting = false;
+      throw err;  // propagate the error up the chain
+    });
 
+    let failCounter=0;
+      while(isConnecting && failCounter<30000){
+        await timeout(10);
+        failCounter++;
+      }
+
+      if(isConnecting){
+        throw new Error("Connection Issue");
+      }
+
+  } else {
+    console.error("Install MetaMask.");
   }
+
+}
+
+
 
 }
