@@ -33,19 +33,20 @@ export default class Web3service extends DirectNetworkService {
       
   }
 
+  //important!!! call as early as possible, check if metamask is installed first
   registerHandlers() {
     if (!this.hasWalletEventsSet) {
-      console.debug('registering web3 handlers');
-      const signer = this._ethersProvider.getSigner();
-
-      this.libwalletContract = new _ethers.Contract(this._libwallet_contract_address,this._contractAbi, signer);
-   
+     
 
       window.ethereum.on("disconnect", (error) => {
         console.log(`Disconnected from network ${error}`);
         this.router.transitionTo('/');
       });
 
+      window.ethereum.on("connect", (data) => {
+        console.log(`Connected ${data}`);
+        this.router.transitionTo('/');
+      });
       window.ethereum.on("accountsChanged", (accounts) => {
         if (accounts.length > 0) {
           this.connectedAccount = window.ethereum.selectedAddress;
@@ -66,6 +67,15 @@ export default class Web3service extends DirectNetworkService {
 
   }
 
+  
+  registerContract() {
+      console.debug('registering web3 contract / signer');
+      const signer = this._ethersProvider.getSigner();
+
+      this.libwalletContract = new _ethers.Contract(this._libwallet_contract_address,this._contractAbi, signer);
+   
+
+    }
 
   
   async getBalance(wait = false) {

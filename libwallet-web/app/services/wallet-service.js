@@ -15,7 +15,11 @@ export default class WalletService extends Service {
     {
     // Check if MetaMask is installed
     if (typeof window.ethereum !== 'undefined' || typeof window.web3 !== 'undefined') {
+
       // MetaMask is installed
+      
+
+
       const chainId = await window.ethereum.request({ method: 'eth_chainId' });
       if (chainId === this.targetChainId) {
         try {
@@ -26,7 +30,6 @@ export default class WalletService extends Service {
           // If wallet is connected
           if(this.web3service.isConnected){
 
-            await this.web3service.registerHandlers();
             await this.libwalletWebService.setup(
               this.web3service._ethersProvider, 
               this.web3service._libwallet_contract_address, 

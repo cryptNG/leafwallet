@@ -1,5 +1,51 @@
-{{!-- index.hbs --}}
+
+<style>
+
+  div.text{
+    
+    position: fixed;
+    top: 49%;
+    color: white;
+    font-weight: 800;
+    max-width: 180px;
+    font-size: small;
+     font-family: "Quicksand";
+    src: url("/fonts/Quicksand-VariableFont_wght.ttf");
+    font-display: swap;
+  }
+
+.loading{
+  display: flex;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+}
+
+div.loading-spinner.large div.spinner
+{
+width: 200px;
+height: 200px;
+}
+
+.loading-spinner {
+   position: absolute;
+   top: 0;
+   right: 0;
+   bottom: 0;
+   left: 0;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   z-index: 1;  /* Put the spinner above the video */
+}
+
+</style>
 {{page-title "Loading..."}}
 <div class="loading">
-  Loading...
+<div class="text">
+  Connecting to MetaMask
+</div>
+ <div class="loading-spinner large">
+      <LoadingSpinner />
+    </div>
 </div>
