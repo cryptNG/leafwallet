@@ -5,6 +5,7 @@
 
 ! --- topical URL slugs (substring match on the whole URL) ---
 /business/$boost=3
+/business^$boost=3
 /crime/$boost=3
 /fraud/$boost=3
 /scam/$boost=3
